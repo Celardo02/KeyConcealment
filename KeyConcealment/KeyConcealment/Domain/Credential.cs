@@ -48,4 +48,9 @@ public class Credential : IDom<string>
     public string Pwd {get => _pwd; set => _pwd = value;}
     public DateTime Exp {get => _exp; set => _exp = value;}
     #endregion
+
+    public bool IsComplete()
+    {
+        return !string.IsNullOrEmpty(this._id) && !string.IsNullOrEmpty(this._pwd) && !string.IsNullOrEmpty(this._mail);
+    }
 }

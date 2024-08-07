@@ -45,7 +45,14 @@ public class Credential : IDom<string>
     public string Id {get => _id; set => _id = value;}
     public string? Usr {get => _usr; set => _usr = value;}
     public string Mail {get => _mail; set => _mail = value;}
-    public string Pwd {get => _pwd; set => _pwd = value;}
+    public string Pwd { get => _pwd; 
+                        set 
+                            {
+                                _pwd = value;
+                                this._exp = DateTime.UtcNow;
+                                this._exp = this._exp.AddMonths(EXP_TIME);
+                            }
+                      }
     public DateTime Exp {get => _exp; set => _exp = value;}
     #endregion
 

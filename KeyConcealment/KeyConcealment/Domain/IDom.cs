@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KeyConcealment;
+namespace KeyConcealment.Domain;
 
 public interface IDom<ID>
 {

@@ -17,6 +17,10 @@ public interface IPers<K,V> where V : IDom<K>
     /// Throws a <c>PersExc</c> exception if <c>obj</c> does not meet the requirements 
     /// imposed by <c>IsComplete</c> domain method
     /// </exception>
+    /// <exception cref="FormatException">
+    /// Throws a <c>FormatException</c> exception if <c>obj</c> hasn't got an email as 
+    /// id
+    /// </exception>
     void Create(V obj);
 
     /// <summary>
@@ -39,6 +43,10 @@ public interface IPers<K,V> where V : IDom<K>
     /// Throws a <c>PersExcNotFound</c> exception if an object with <c>id</c> as 
     /// identifier does not exist
     /// </exception>
+    /// <exception cref="FormatException">
+    /// Throws a <c>FormatException</c> exception if <c>obj</c> hasn't got an email as 
+    /// id
+    /// </exception>
     void Update(K id, V obj);
 
     /// <summary>
@@ -59,4 +67,16 @@ public interface IPers<K,V> where V : IDom<K>
     /// Throws a <c>PersExc</c> exception if the persistence is empty
     /// </exception>
     List<V> ListAll();
+
+    /// <summary>
+    /// Saves the current persistence content inside a file
+    /// </summary>
+    /// <param name="path">path where to save the file</param>
+    void Save(string path);
+
+    /// <summary>
+    /// Load the persistence content from a file 
+    /// </summary>
+    /// <param name="path">path where to find the file</param>
+    void Load(string path);
 }

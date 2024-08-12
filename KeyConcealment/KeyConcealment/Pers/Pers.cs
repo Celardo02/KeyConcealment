@@ -82,7 +82,7 @@ public class Pers : IPers<string, Credential>
         if(!this._creds.ContainsKey(id))
             throw new PersExcNotFound("Credential with " + id + " as Id does not exist. Please, insert a valid Id");
         
-        return new Credential(_creds[id]);
+        return new Credential(this._creds[id]);
     }
 
     public void Save(string path)

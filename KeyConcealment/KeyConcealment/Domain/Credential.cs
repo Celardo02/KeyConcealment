@@ -23,21 +23,27 @@ public class Credential : IDom<string>
     #region constructors
     public Credential(string id, string mail, string pwd)
     {
-        this._id = id;
-        this._mail = mail;
-        this._pwd = pwd;
-        this._exp = DateTime.UtcNow;
-        this._exp = this._exp.AddMonths(EXP_TIME);
+        this.Id = id;
+        this.Usr = null;
+        this.Mail = mail;
+        this.Pwd = pwd;
     }
 
     public Credential(string id, string mail, string usr, string pwd)
     {
-        this._id = id;
-        this._usr = usr; 
-        this._mail = mail;
-        this._pwd = pwd;
-        this._exp = DateTime.UtcNow;
-        this._exp = this._exp.AddMonths(EXP_TIME);
+        this.Id = id;
+        this.Usr = usr;
+        this.Mail = mail;
+        this.Pwd = pwd;
+    }
+
+    public Credential(Credential c)
+    {
+        this.Id = c.Id;
+        this.Usr = c.Usr;
+        this.Mail = c.Mail;
+        this._pwd = c.Pwd;
+        this.Exp = c.Exp;
     }
     #endregion 
 

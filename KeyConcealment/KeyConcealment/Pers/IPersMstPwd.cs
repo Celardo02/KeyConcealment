@@ -4,6 +4,9 @@ using KeyConcealment.Domain;
 
 namespace KeyConcealment.Pers;
 
+/// <summary>
+/// Interface of a persistence class that handles IMasterPwd Domain type objects
+/// </summary>
 public interface IPersMstPwd
 {
     /// <summary>

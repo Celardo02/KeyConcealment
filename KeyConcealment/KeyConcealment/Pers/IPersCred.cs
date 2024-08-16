@@ -4,6 +4,11 @@ using KeyConcealment.Domain;
 
 namespace KeyConcealment.Pers;
 
+/// <summary>
+/// Interface of a persistence class that handles ICred Domain type objects
+/// </summary>
+/// <typeparam name="K">Id used in the domain class</typeparam>
+/// <typeparam name="V">Concrete class that inherits from <c>ICred<K></c></typeparam>
 public interface IPersCred<K,V> where V : ICred<K>
 {
     /// <summary>

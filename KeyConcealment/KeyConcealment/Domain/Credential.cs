@@ -5,16 +5,10 @@ namespace KeyConcealment.Domain;
 public class Credential : ICred<string>
 {
     #region attributes
-    // unuique id. It's a label assigned by the user to understand which service is  
-    // related to the class instance
     private string _id;
-    // username. It is nullable as an account may use the e-mail as username
     private string? _usr;
-    // e-mail 
     private string _mail;
-    // password 
     private string _pwd;
-    // expiration date: date after which the app advise the user to change the password
     private DateTime _exp;
     // expiration time expressed in months
     private const ushort EXP_TIME = 3; 

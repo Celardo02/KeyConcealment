@@ -2,7 +2,7 @@
 
 namespace KeyConcealment.Domain;
 
-public class Credential : IDom<string>
+public class Credential : ICred<string>
 {
     #region attributes
     // unuique id. It's a label assigned by the user to understand which service is  
@@ -37,33 +37,28 @@ public class Credential : IDom<string>
         this.Pwd = pwd;
     }
 
-    public Credential(Credential c)
+    public Credential(ICred<string> c)
     {
         this.Id = c.Id;
         this.Usr = c.Usr;
         this.Mail = c.Mail;
         this._pwd = c.Pwd;
-        this.Exp = c.Exp;
+        this._exp = c.Exp;
     }
     #endregion 
 
     #region getters and setters
-    public string Id {get => _id; set => _id = value;}
-    public string? Usr {get => _usr; set => _usr = value;}
-    public string Mail {get => _mail; set => _mail = value;}
-    public string Pwd { get => _pwd; 
+    public string Id {get => this._id; set => this._id = value;}
+    public string? Usr {get => this._usr; set => this._usr = value;}
+    public string Mail {get => this._mail; set => this._mail = value;}
+    public string Pwd { get => this._pwd; 
                         set 
                             {
-                                _pwd = value;
-                                this._exp = DateTime.UtcNow;
+                                this._pwd = value;
+                                this._exp = DateTime.Today;
                                 this._exp = this._exp.AddMonths(EXP_TIME);
                             }
                       }
-    public DateTime Exp {get => _exp; set => _exp = value;}
+    public DateTime Exp {get => this._exp;}
     #endregion
-
-    public bool IsComplete()
-    {
-        return !string.IsNullOrEmpty(this._id) && !string.IsNullOrEmpty(this._pwd) && !string.IsNullOrEmpty(this._mail);
-    }
 }

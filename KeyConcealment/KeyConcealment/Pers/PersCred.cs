@@ -85,7 +85,7 @@ public class PersCred : IPersCred<string, ICred<string>>
         if(!this._credSets.ContainsKey(id))
             throw new PersExcNotFound("Credentials with " + id + " as Id do not exist. Please, insert a valid Id");
         
-        return new Credential(this._credSets[id]);
+        return new Credentials(this._credSets[id]);
     }
 
     public void Save(string path)

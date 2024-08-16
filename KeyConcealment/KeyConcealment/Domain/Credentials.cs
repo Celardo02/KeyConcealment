@@ -2,7 +2,7 @@
 
 namespace KeyConcealment.Domain;
 
-public class Credential : ICred<string>
+public class Credentials : ICred<string>
 {
     #region attributes
     private string _id;
@@ -15,7 +15,7 @@ public class Credential : ICred<string>
     #endregion
 
     #region constructors
-    public Credential(string id, string mail, string pwd)
+    public Credentials(string id, string mail, string pwd)
     {
         this.Id = id;
         this.Usr = null;
@@ -23,7 +23,7 @@ public class Credential : ICred<string>
         this.Pwd = pwd;
     }
 
-    public Credential(string id, string mail, string usr, string pwd)
+    public Credentials(string id, string mail, string usr, string pwd)
     {
         this.Id = id;
         this.Usr = usr;
@@ -31,7 +31,7 @@ public class Credential : ICred<string>
         this.Pwd = pwd;
     }
 
-    public Credential(ICred<string> c)
+    public Credentials(ICred<string> c)
     {
         this.Id = c.Id;
         this.Usr = c.Usr;

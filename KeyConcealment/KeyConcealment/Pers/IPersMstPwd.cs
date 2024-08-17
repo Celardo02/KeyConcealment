@@ -43,5 +43,9 @@ public interface IPersMstPwd
     /// Throws a <c>PersExc</c> if the new password does not meet one or more  
     /// security constraint
     /// </exception>
-    void SetMasterPwd(string newPwd);
+    void SetNewMasterPwd(string newPwd);
+
+    // setter is realised with another method because it has to take a string as 
+    // input instead of an IMasterPwd? object
+    IMasterPwd? MPwd {get;}
 }

@@ -88,7 +88,9 @@ public class PersMstPwd : IPersMstPwd
         return DateTime.Today > this._mPwd.Exp;
     }
 
-    public void SetMasterPwd(string newPwd)
+    public IMasterPwd? MPwd {get => this._mPwd;}
+
+    public void SetNewMasterPwd(string newPwd)
     {
         // byte array that will contain the new salt value
         byte[] salt = new byte[SALT_LEN];

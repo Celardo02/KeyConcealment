@@ -22,6 +22,7 @@ public class PersMstPwd : IPersMstPwd
     private SortedSet<string> _oldSalts;
     // lenght of the byte array used for the salt
     private const ushort SALT_LEN = 64; 
+    #endregion
 
     #region password requirements constants
     // minimum master password lenght  
@@ -36,7 +37,6 @@ public class PersMstPwd : IPersMstPwd
     private const byte LOW_CASE = 1;
     // special characters allowed inside the password
     private const string ALLOWED_SPEC_CHAR = "-+_&@%$£#!";
-    #endregion
     #endregion
 
     #region singleton

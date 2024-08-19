@@ -7,7 +7,7 @@ public class Credentials : ICred<string>
     #region attributes
     private string _id;
     private string? _usr;
-    private string _mail;
+    private string? _mail;
     private string _pwd;
     private DateTime _exp;
     // expiration time expressed in months
@@ -15,15 +15,8 @@ public class Credentials : ICred<string>
     #endregion
 
     #region constructors
-    public Credentials(string id, string mail, string pwd)
-    {
-        this.Id = id;
-        this.Usr = null;
-        this.Mail = mail;
-        this.Pwd = pwd;
-    }
 
-    public Credentials(string id, string mail, string usr, string pwd)
+    public Credentials(string id, string pwd, string? mail = null, string? usr = null)
     {
         this.Id = id;
         this.Usr = usr;
@@ -44,7 +37,7 @@ public class Credentials : ICred<string>
     #region getters and setters
     public string Id {get => this._id; set => this._id = value;}
     public string? Usr {get => this._usr; set => this._usr = value;}
-    public string Mail {get => this._mail; set => this._mail = value;}
+    public string? Mail {get => this._mail; set => this._mail = value;}
     public string Pwd { get => this._pwd; 
                         set 
                             {

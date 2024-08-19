@@ -20,7 +20,7 @@ public interface ICred<ID>
     /// <summary>
     /// E-mail
     /// </summary>
-    string Mail {get; set;}
+    string? Mail {get; set;}
     /// <summary>
     /// Password
     /// </summary>

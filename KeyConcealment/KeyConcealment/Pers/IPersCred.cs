@@ -74,18 +74,6 @@ public interface IPersCred<K,V> where V : ICred<K>
     List<V> ListAll();
 
     /// <summary>
-    /// Saves the current persistence content inside a file
-    /// </summary>
-    /// <param name="path">path where to save the file</param>
-    void Save(string path);
-
-    /// <summary>
-    /// Load the persistence content from a file 
-    /// </summary>
-    /// <param name="path">path where to find the file</param>
-    void Load(string path);
-
-    /// <summary>
     /// Checks if <c>cred</c> has the minimum pieces of information required to  
     /// be meaningful
     /// </summary>

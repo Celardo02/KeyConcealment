@@ -80,16 +80,6 @@ public class PersCred : IPersCred<string, ICred<string>>
         return new List<ICred<string>>(this._credSets.Values.ToList());
     }
 
-    public void Load(string path)
-    {
-        /* Reminder: keep in mind that the password file must contain all the data
-        *  about the master password (the ones in the domain class) and all the old 
-        *  values used as nonces or salts.
-        *  Cyptography class is already included 
-        */
-        throw new NotImplementedException();
-    }
-
     public ICred<string> Read(string id)
     {
         // checking if _credSets contains a credential set using "id" as identifier
@@ -97,16 +87,6 @@ public class PersCred : IPersCred<string, ICred<string>>
             throw new PersExcNotFound("Credentials with " + id + " as Id do not exist. Please, insert a valid Id");
         
         return new Credentials(this._credSets[id]);
-    }
-
-    public void Save(string path)
-    {
-        /* Reminder: keep in mind that the password file must contain all the data
-        *  about the master password (the ones in the domain class) and all the old 
-        *  values used as nonces or salts.
-        *  Cyptography class is already included 
-        */
-        throw new NotImplementedException();
     }
 
     public void Update(string id, ICred<string> creds)

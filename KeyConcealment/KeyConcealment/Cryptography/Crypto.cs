@@ -161,6 +161,11 @@ public class Crypto : ICrypto
         return Convert.ToBase64String(cypheredBytes);
     }
 
+    public List<string> OldNonces {get => this._oldNonces.Values.ToList();}
+
+    public List<string> OldSalts {get => this._oldSalts.Values.ToList();}
+
+
     public bool VerifyString(string str, byte[] hash, string salt)
     {
         byte[] saltBytes = Convert.FromBase64String(salt);

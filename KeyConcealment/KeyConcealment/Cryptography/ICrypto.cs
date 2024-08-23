@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace KeyConcealment.Cryptography;
@@ -83,6 +84,17 @@ public interface ICrypto
     /// or the decryption operation otherwise failed
     /// </exception>
     string DecryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag);
+    
     // byte[] encryptRSA();
     // byte[] decryptRSA();
+
+    /// <summary>
+    /// List containing all previously used nonce values as base 64 strings
+    /// </summary>
+    List<string> OldNonces {get;}
+
+    /// <summary>
+    /// List containing all previously used salt values as base 64 strings
+    /// </summary>
+    List<string> OldSalts {get;}
 }

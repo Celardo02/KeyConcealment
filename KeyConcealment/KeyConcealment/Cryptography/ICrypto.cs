@@ -16,6 +16,17 @@ public interface ICrypto
     byte[] CalculateHash(string input, ref string salt, ushort hashLen = 64);
 
     /// <summary>
+    /// Checks if a string hash correspond to a previosly computed hash
+    /// </summary>
+    /// <param name="str">string to be compared with the hash</param>
+    /// <param name="hash">previously computed hash</param>
+    /// <param name="salt">
+    /// base 64 string representing the salt value used to compute the hash
+    /// </param>
+    /// <returns></returns>
+    bool VerifyString(string str, byte[] hash, string salt);
+
+    /// <summary>
     /// Encrypts a plain text string using a given key. Nonce and tag will be filled 
     /// with values used during the encryptionz 
     /// </summary>

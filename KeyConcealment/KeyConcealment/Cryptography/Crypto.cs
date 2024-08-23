@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -150,6 +151,15 @@ public class Crypto : ICrypto
         this._aes.Encrypt(nonce, plainBytes, cypheredBytes, tag);
 
         return Convert.ToBase64String(cypheredBytes);
+    }
+
+    public bool VerifyString(string str, byte[] hash, string salt)
+    {
+        byte[] saltBytes = Convert.FromBase64String(salt);
+
+        this._derBy = new Rfc2898DeriveBytes(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
+
+        return hash.SequenceEqual(this._derBy.GetBytes(hash.Length));
     }
     #endregion
 

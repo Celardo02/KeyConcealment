@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace KeyConcealment.Cryptography;
 
 public interface ICrypto
@@ -46,7 +48,14 @@ public interface ICrypto
     /// <remarks>
     /// Nonce array must be 12 bytes long and tag array must be 16 bytes long
     /// </remarks>
-    string encryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag);
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if nonce or tag array length oes not 
+    /// match the right dimension. Respectively, 12 bytes and 16 bytes
+    /// </exception>
+    /// <exception cref="CryptographicException">
+    /// Throws <c>CryptographicException</c> if encryption operations failed
+    /// </exception>
+    string EncryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag);
 
     /// <summary>
     /// Decrypts a cyphered base 64 encoded string using a given key
@@ -62,7 +71,18 @@ public interface ICrypto
     /// <returns>
     /// Returns a UTF-8 encoded string containing the decyphered text
     /// </returns>
-    string decryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag);
+    /// <remarks>
+    /// Nonce array must be 12 bytes long and tag array must be 16 bytes long
+    /// </remarks>
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if nonce or tag array length does not 
+    /// match the right dimension. Respectively, 12 bytes and 16 bytes
+    /// </exception>
+    /// <exception cref="CryptographicException">
+    /// Throws <c>CryptographicException</c> if the tag value could not be verified 
+    /// or the decryption operation otherwise failed
+    /// </exception>
+    string DecryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag);
     // byte[] encryptRSA();
     // byte[] decryptRSA();
 }

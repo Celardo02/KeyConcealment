@@ -85,7 +85,7 @@ public class Crypto : ICrypto
     {
         byte[] saltByte = new byte[SALT_LEN]; 
 
-        saltByte = this.generateNewByteArray(SALT_LEN, this._oldSalts);
+        saltByte = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
 
         salt = Convert.ToBase64String(saltByte);
         // adding the newly generated salt value to the old ones
@@ -98,11 +98,19 @@ public class Crypto : ICrypto
         return this._derBy.GetBytes(hashLen);
     }
 
-    public string decryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag)
+    public string DecryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag)
     {
         byte[] cypheredByte = Convert.FromBase64String(cyphered);
         // byte array that will contain plain text
         byte[] plainByte = new byte[cypheredByte.Length];
+
+        // checking nonce array size
+        if(nonce.Length != NonceSize)
+            throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
+        
+        // checking tag array size
+        if(tag.Length != TagSize)
+            throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
         // initializing the KDF algorithm
         this._derBy = new Rfc2898DeriveBytes(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
@@ -113,7 +121,7 @@ public class Crypto : ICrypto
         return Encoding.UTF8.GetString(plainByte);
     }
 
-    public string encryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag)
+    public string EncryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag)
     {
         // converting plain text in a byte array
         byte[] plainBytes = Encoding.UTF8.GetBytes(plain);
@@ -124,7 +132,7 @@ public class Crypto : ICrypto
         // string used to keep base64 encoded value of nonce byte array
         string nonceStr;
 
-        saltBytes = this.generateNewByteArray(SALT_LEN, this._oldSalts);
+        saltBytes = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
         keySalt = Convert.ToBase64String(saltBytes);
         // adding the newly generated salt value to the old ones
         this._oldSalts.Add(keySalt, keySalt);
@@ -141,7 +149,7 @@ public class Crypto : ICrypto
         if(tag.Length != TagSize)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
-        nonce = generateNewByteArray(NonceSize, this._oldNonces);
+        nonce = GenerateNewByteArray(NonceSize, this._oldNonces);
         nonceStr = Convert.ToBase64String(nonce);
         // adding the newly generated nonce value to the old ones
         this._oldNonces.Add(nonceStr, nonceStr);
@@ -175,7 +183,7 @@ public class Crypto : ICrypto
     /// Both the key and the value of each item in <c>d</c> must be the same base 64 
     /// string
     /// </remarks>
-    private byte[] generateNewByteArray(ushort len, Dictionary<string,string> d)
+    private byte[] GenerateNewByteArray(ushort len, Dictionary<string,string> d)
     {
         byte[] ba = new byte[len];
 

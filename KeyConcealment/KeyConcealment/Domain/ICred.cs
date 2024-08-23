@@ -26,6 +26,14 @@ public interface ICred<ID>
     /// </summary>
     string Pwd { get; set;}
     /// <summary>
+    /// Password hash
+    /// </summary>
+    byte[] Hash {get; set;}
+    /// <summary>
+    /// Base 64 string containing salt value used to compute Hash
+    /// </summary>
+    string Salt {get; set;}
+    /// <summary>
     /// expiration date: date after which the app advise/force the user to change the password
     /// </summary>
     DateTime Exp {get;}

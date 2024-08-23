@@ -10,11 +10,11 @@ public class MasterPwd : IMasterPwd
     private DateTime _exp;
     // expiration time expressed in months
     private const ushort EXP_TIME = 3; 
-    private byte[] _salt;
+    private string _salt;
     #endregion
 
     #region constructors
-    public MasterPwd(byte[] hash, byte[] salt)
+    public MasterPwd(byte[] hash, string salt)
     {
         this.Hash = hash;
         this.Salt = salt;
@@ -34,6 +34,6 @@ public class MasterPwd : IMasterPwd
                                 this._exp = this._exp.AddMonths(EXP_TIME);
                             } 
                         }
-    public byte[] Salt{get => this._salt; set => this._salt = value;}
+    public string Salt{get => this._salt; set => this._salt = value;}
     public DateTime Exp { get => this._exp;}
 }

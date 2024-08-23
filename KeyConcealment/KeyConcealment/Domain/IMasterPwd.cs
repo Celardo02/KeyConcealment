@@ -15,9 +15,9 @@ public interface IMasterPwd
     byte[] Hash {get; set;}
     
     /// <summary>
-    /// salt added to the password before calculating the hash
+    /// salt added to the password before computing the hash. base64 format only
     /// </summary>
-    byte[] Salt{get; set;} 
+    string Salt{get; set;} 
     
     /// <summary>
     /// expiration date of the master password

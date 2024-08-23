@@ -1,16 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 
 namespace KeyConcealment.Pers;
 
 public class PersCred : IPersCred<string, ICred<string>>
 {
+    #region attributes
+    
     private Dictionary<string, ICred<string>> _credSets;
     private readonly string _pattern;
+    private readonly ICrypto _crypt;
+    
+    #endregion 
 
     #region singleton
     private static PersCred? _instance = null;
@@ -23,6 +28,7 @@ public class PersCred : IPersCred<string, ICred<string>>
         // allowing any character beside white space. This constraint is not tight at all 
         // to allow any kind of format used by a service
         this._pattern = @"^[\S]+@[\S]+\.[\S]+$";
+        this._crypt = Crypto.Instance;
     }
 
     public static PersCred Instance
@@ -48,7 +54,7 @@ public class PersCred : IPersCred<string, ICred<string>>
             throw new PersExcDupl("Id " + creds.Id + " already exists. Please, choose a unique Id");
         
         if(!IsCredComplete(creds))
-            throw new PersExc("Passed credentials are incomplete");
+            throw new PersExc("Given credentials are incomplete");
         
         // checking if creds.Id is an e-mail
         if(!Regex.Match(creds.Id, this._pattern).Success)
@@ -76,6 +82,11 @@ public class PersCred : IPersCred<string, ICred<string>>
 
     public void Load(string path)
     {
+        /* Reminder: keep in mind that the password file must contain all the data
+        *  about the master password (the ones in the domain class) and all the old 
+        *  values used as nonces or salts.
+        *  Cyptography class is already included 
+        */
         throw new NotImplementedException();
     }
 
@@ -90,6 +101,11 @@ public class PersCred : IPersCred<string, ICred<string>>
 
     public void Save(string path)
     {
+        /* Reminder: keep in mind that the password file must contain all the data
+        *  about the master password (the ones in the domain class) and all the old 
+        *  values used as nonces or salts.
+        *  Cyptography class is already included 
+        */
         throw new NotImplementedException();
     }
 

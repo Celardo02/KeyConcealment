@@ -23,7 +23,9 @@ public interface ICrypto
     /// <param name="salt">
     /// base 64 string representing the salt value used to compute the hash
     /// </param>
-    /// <returns></returns>
+    /// <returns>
+    /// Returns <c>true</c> if <c>str</c> hash and <c>hash</c> are the same; <c>false</c> otherwise
+    /// </returns>
     bool VerifyString(string str, byte[] hash, string salt);
 
     /// <summary>

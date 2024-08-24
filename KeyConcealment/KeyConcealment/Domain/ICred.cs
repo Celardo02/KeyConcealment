@@ -22,11 +22,11 @@ public interface ICred<ID>
     /// </summary>
     string? Mail {get; set;}
     /// <summary>
-    /// Password
+    /// Password. It is encrypted with master password
     /// </summary>
     string Pwd { get; set;}
     /// <summary>
-    /// Password hash
+    /// Unencryted password hash
     /// </summary>
     byte[] Hash {get; set;}
     /// <summary>

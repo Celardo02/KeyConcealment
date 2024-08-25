@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System;
 
 namespace KeyConcealment.Cryptography;
 
@@ -14,22 +15,22 @@ public interface ICrypto
     /// length of the returned hash expressed in bytes. Default = 64 (512 bits)
     /// </param>
     /// <returns>
-    /// Returns a byte array containing the password hash
+    /// Returns a base 64 string containing the password hash
     /// </returns>
-    byte[] CalculateHash(string input, ref string salt, ushort hashLen = 64);
+    string CalculateHash(string input, ref string salt, ushort hashLen = 64);
 
     /// <summary>
     /// Checks if a string hash correspond to a previosly computed hash
     /// </summary>
     /// <param name="str">string to be compared with the hash</param>
-    /// <param name="hash">previously computed hash</param>
+    /// <param name="hash">base 64 string containing previously computed hash</param>
     /// <param name="salt">
     /// base 64 string representing the salt value used to compute the hash
     /// </param>
     /// <returns>
     /// Returns <c>true</c> if <c>str</c> hash and <c>hash</c> are the same; <c>false</c> otherwise
     /// </returns>
-    bool VerifyString(string str, byte[] hash, string salt);
+    bool VerifyString(string str, string hash, string salt);
 
     /// <summary>
     /// Encrypts a plain text string using a given key. Nonce and tag will be filled 
@@ -41,8 +42,8 @@ public interface ICrypto
     /// string that will be filled with the salt value used by the encryption algorithm. 
     /// It will be encoded as base 64
     /// </param>
-    /// <param name="nonce">byte array to be filled with inizialization vector value</param>
-    /// <param name="tag">byte array to be filled with AES GMC tag value</param>
+    /// <param name="nonce">base 64 string to be filled with inizialization vector value</param>
+    /// <param name="tag">base 64 string to be filled with AES GMC tag value</param>
     /// <returns>
     /// Returns a base 64 string containing <c>plain</c> encrypted
     /// </returns>
@@ -56,7 +57,7 @@ public interface ICrypto
     /// <exception cref="CryptographicException">
     /// Throws <c>CryptographicException</c> if encryption operations failed
     /// </exception>
-    string EncryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag);
+    string EncryptAES_GMC(string plain, string key, ref string keySalt, ref string nonce, ref string tag);
 
     /// <summary>
     /// Decrypts a cyphered base 64 encoded string using a given key
@@ -83,10 +84,14 @@ public interface ICrypto
     /// Throws <c>CryptographicException</c> if the tag value could not be verified 
     /// or the decryption operation otherwise failed
     /// </exception>
-    string DecryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag);
+    /// <exception cref="ArgumentNullException">
+    /// Throws <c>ArgumentNullException</c> if any argument between <c>cyphered</c>, 
+    /// <c>nonce</c>, <c>keySalt</c> or <c>tag</c> is null
+    /// </exception>
+    string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag);
     
-    // byte[] encryptRSA();
-    // byte[] decryptRSA();
+    // string encryptRSA();
+    // string decryptRSA();
 
     /// <summary>
     /// List containing all previously used nonce values as base 64 strings

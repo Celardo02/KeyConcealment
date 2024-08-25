@@ -81,7 +81,7 @@ public class Crypto : ICrypto
     #endregion
 
     #region ICripto methods
-    public byte[] CalculateHash(string input, ref string salt, ushort hashLen = 64)
+    public string CalculateHash(string input, ref string salt, ushort hashLen = 64)
     {
         byte[] saltByte = new byte[SALT_LEN]; 
 
@@ -95,42 +95,48 @@ public class Crypto : ICrypto
         this._derBy = new Rfc2898DeriveBytes(input, saltByte, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
 
         // returning the hash 
-        return this._derBy.GetBytes(hashLen);
+        return Convert.ToBase64String(this._derBy.GetBytes(hashLen));
     }
 
-    public string DecryptAES_GMC(string cyphered, string key, string keySalt, byte[] nonce, byte[] tag)
+    public string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag)
     {
         byte[] cypheredByte = Convert.FromBase64String(cyphered);
         // byte array that will contain plain text
         byte[] plainByte = new byte[cypheredByte.Length];
+        // byte array that will contain Aes nonce value
+        byte[] nonceByte = Convert.FromBase64String(nonce);
+        // byte array that will contain Aes tag value
+        byte[] tagByte = Convert.FromBase64String(tag);
 
         // checking nonce array size
-        if(nonce.Length != NonceSize)
+        if(nonceByte.Length != NonceSize)
             throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
         
         // checking tag array size
-        if(tag.Length != TagSize)
+        if(tagByte.Length != TagSize)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
         // initializing the KDF algorithm
         this._derBy = new Rfc2898DeriveBytes(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
 
         this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN),TagSize);
-        this._aes.Decrypt(nonce, cypheredByte, tag, plainByte);
+        this._aes.Decrypt(nonceByte, cypheredByte, tagByte, plainByte);
 
         return Encoding.UTF8.GetString(plainByte);
     }
 
-    public string EncryptAES_GMC(string plain, string key, ref string keySalt, ref byte[] nonce, ref byte[] tag)
+    public string EncryptAES_GMC(string plain, string key, ref string keySalt, ref string nonce, ref string tag)
     {
         // converting plain text in a byte array
         byte[] plainBytes = Encoding.UTF8.GetBytes(plain);
         // creating the array that will contain the cyphered text
         byte[] cypheredBytes = new byte[plainBytes.Length];
         // byte array used to contain salt value use by KDF algorithm
-        byte[] saltBytes = new byte[SALT_LEN];
-        // string used to keep base64 encoded value of nonce byte array
-        string nonceStr;
+        byte[] saltBytes;
+        // byte array that will contain Aes nonce value
+        byte[] nonceByte;
+        // byte array that will contain Aes tag value
+        byte[] tagByte = new byte[TagSize];
 
         saltBytes = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
         keySalt = Convert.ToBase64String(saltBytes);
@@ -149,14 +155,14 @@ public class Crypto : ICrypto
         if(tag.Length != TagSize)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
-        nonce = GenerateNewByteArray(NonceSize, this._oldNonces);
-        nonceStr = Convert.ToBase64String(nonce);
+        nonceByte = GenerateNewByteArray(NonceSize, this._oldNonces);
+        nonce = Convert.ToBase64String(nonceByte);
         // adding the newly generated nonce value to the old ones
-        this._oldNonces.Add(nonceStr, nonceStr);
+        this._oldNonces.Add(nonce, nonce);
 
         // extracting a 256 bits (32 bytes) key with this._derBy.GetBytes(32) 
         this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN), TagSize);
-        this._aes.Encrypt(nonce, plainBytes, cypheredBytes, tag);
+        this._aes.Encrypt(nonceByte, plainBytes, cypheredBytes, tagByte);
 
         return Convert.ToBase64String(cypheredBytes);
     }
@@ -166,13 +172,14 @@ public class Crypto : ICrypto
     public List<string> OldSalts {get => this._oldSalts.Values.ToList();}
 
 
-    public bool VerifyString(string str, byte[] hash, string salt)
+    public bool VerifyString(string str, string hash, string salt)
     {
         byte[] saltBytes = Convert.FromBase64String(salt);
+        byte[] hashByte = Convert.FromBase64String(hash);
 
         this._derBy = new Rfc2898DeriveBytes(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
 
-        return hash.SequenceEqual(this._derBy.GetBytes(hash.Length));
+        return hashByte.SequenceEqual(this._derBy.GetBytes(hash.Length));
     }
     #endregion
 

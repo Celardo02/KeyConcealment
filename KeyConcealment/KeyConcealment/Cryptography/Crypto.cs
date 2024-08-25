@@ -26,9 +26,9 @@ public class Crypto : ICrypto
     #region Constants and readonly attributes
 
     // nonce size that will be used by AES
-    public static readonly ushort NonceSize = 12;
+    private const ushort NONCE_SIZE = 12;
     // tag size that will be used by AES
-    public static readonly ushort TagSize = 16;
+    private const ushort TAG_SIZE = 16;
 
     // the above two constants are public to allow other classes to create byte arrays with 
     // proper length
@@ -109,17 +109,17 @@ public class Crypto : ICrypto
         byte[] tagByte = Convert.FromBase64String(tag);
 
         // checking nonce array size
-        if(nonceByte.Length != NonceSize)
+        if(nonceByte.Length != NONCE_SIZE)
             throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
         
         // checking tag array size
-        if(tagByte.Length != TagSize)
+        if(tagByte.Length != TAG_SIZE)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
         // initializing the KDF algorithm
         this._derBy = new Rfc2898DeriveBytes(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
 
-        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN),TagSize);
+        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN),TAG_SIZE);
         this._aes.Decrypt(nonceByte, cypheredByte, tagByte, plainByte);
 
         return Encoding.UTF8.GetString(plainByte);
@@ -136,7 +136,7 @@ public class Crypto : ICrypto
         // byte array that will contain Aes nonce value
         byte[] nonceByte;
         // byte array that will contain Aes tag value
-        byte[] tagByte = new byte[TagSize];
+        byte[] tagByte = new byte[TAG_SIZE];
 
         saltBytes = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
         keySalt = Convert.ToBase64String(saltBytes);
@@ -148,20 +148,20 @@ public class Crypto : ICrypto
         this._derBy = new Rfc2898DeriveBytes(key, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg); 
 
         // checking nonce array size
-        if(nonce.Length != NonceSize)
+        if(nonce.Length != NONCE_SIZE)
             throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
         
         // checking tag array size
-        if(tag.Length != TagSize)
+        if(tag.Length != TAG_SIZE)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
-        nonceByte = GenerateNewByteArray(NonceSize, this._oldNonces);
+        nonceByte = GenerateNewByteArray(NONCE_SIZE, this._oldNonces);
         nonce = Convert.ToBase64String(nonceByte);
         // adding the newly generated nonce value to the old ones
         this._oldNonces.Add(nonce, nonce);
 
         // extracting a 256 bits (32 bytes) key with this._derBy.GetBytes(32) 
-        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN), TagSize);
+        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN), TAG_SIZE);
         this._aes.Encrypt(nonceByte, plainBytes, cypheredBytes, tagByte);
 
         return Convert.ToBase64String(cypheredBytes);

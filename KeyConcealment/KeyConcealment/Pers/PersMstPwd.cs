@@ -82,8 +82,8 @@ public class PersMstPwd : IPersMstPwd
     {
         // string that will contain the new salt value
         string salt = "";
-        // byte array that will contain newPwd hash value
-        byte[] newPwdHash;
+        // base 64 string that will contain newPwd hash value
+        string newPwdHash;
         
         // checking if the new typed password is equal to the old one only if a master 
         // password already exists

@@ -26,13 +26,18 @@ public interface ICred<ID>
     /// </summary>
     string Pwd { get; set;}
     /// <summary>
-    /// Unencryted password hash
+    /// Nonce/Initialization vector of the encryption function
     /// </summary>
-    byte[] Hash {get; set;}
+    byte[] EncNonce {get; set;}
     /// <summary>
-    /// Base 64 string containing salt value used to compute Hash
+    /// Tag used by the encryption function
     /// </summary>
-    string Salt {get; set;}
+    byte[] EncTag {get; set;}
+    /// <summary>
+    /// Base 64 string containing salt value used to the Key derivation function of 
+    /// the encryption function
+    /// </summary>
+    string EncSalt {get; set;}
     /// <summary>
     /// expiration date: date after which the app advise/force the user to change the password
     /// </summary>

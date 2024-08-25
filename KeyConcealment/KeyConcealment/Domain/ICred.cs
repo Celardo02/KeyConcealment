@@ -26,13 +26,13 @@ public interface ICred<ID>
     /// </summary>
     string Pwd { get; set;}
     /// <summary>
-    /// Nonce/Initialization vector of the encryption function
+    /// Nonce/Initialization vector of the encryption function represented by a base 64 string
     /// </summary>
-    byte[] EncNonce {get; set;}
+    string EncNonce {get; set;}
     /// <summary>
-    /// Tag used by the encryption function
+    /// Tag used by the encryption function represented by a base 64 string
     /// </summary>
-    byte[] EncTag {get; set;}
+    string EncTag {get; set;}
     /// <summary>
     /// Base 64 string containing salt value used to the Key derivation function of 
     /// the encryption function

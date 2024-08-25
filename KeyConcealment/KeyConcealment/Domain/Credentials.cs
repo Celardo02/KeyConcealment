@@ -9,8 +9,8 @@ public class Credentials : ICred<string>
     private string? _usr;
     private string? _mail;
     private string _pwd;
-    private byte[] _encNonce;
-    private byte[] _encTag;
+    private string _encNonce;
+    private string _encTag;
     private string _encSalt;
     private DateTime _exp;
     // expiration time expressed in months
@@ -19,7 +19,7 @@ public class Credentials : ICred<string>
 
     #region constructors
 
-    public Credentials(string id, string pwd, byte[] encNonce, byte[] encTag, string encSalt, string? mail = null, string? usr = null)
+    public Credentials(string id, string pwd, string encNonce, string encTag, string encSalt, string? mail = null, string? usr = null)
     {
         this.Id = id;
         this.Usr = usr;
@@ -55,8 +55,8 @@ public class Credentials : ICred<string>
                                 this._exp = this._exp.AddMonths(EXP_TIME);
                             }
                       }
-    public byte[] EncNonce {get => this._encNonce; set => this._encNonce = value;}
-    public byte[] EncTag {get => this._encTag; set => this._encTag = value;}
+    public string EncNonce {get => this._encNonce; set => this._encNonce = value;}
+    public string EncTag {get => this._encTag; set => this._encTag = value;}
     public string EncSalt {get => this._encSalt; set => this._encSalt = value;}
     public DateTime Exp {get => this._exp;}
     #endregion

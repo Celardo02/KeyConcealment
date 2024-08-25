@@ -10,9 +10,9 @@ namespace KeyConcealment.Domain;
 public interface IMasterPwd
 {
     /// <summary>
-    /// master password salted hash
+    /// base 64 string containing master password salted hash
     /// </summary>
-    byte[] Hash {get; set;}
+    string Hash {get; set;}
     
     /// <summary>
     /// salt added to the password before computing the hash. base64 format only

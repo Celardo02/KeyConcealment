@@ -6,7 +6,7 @@ namespace KeyConcealment.Domain;
 public class MasterPwd : IMasterPwd
 {
     #region attributes
-    private byte[] _hash;
+    private string _hash;
     private DateTime _exp;
     // expiration time expressed in months
     private const ushort EXP_TIME = 3; 
@@ -14,7 +14,7 @@ public class MasterPwd : IMasterPwd
     #endregion
 
     #region constructors
-    public MasterPwd(byte[] hash, string salt)
+    public MasterPwd(string hash, string salt)
     {
         this.Hash = hash;
         this.Salt = salt;
@@ -26,7 +26,7 @@ public class MasterPwd : IMasterPwd
         this._salt = mp.Salt;
     }
     #endregion
-    public byte[] Hash { get => this._hash; 
+    public string Hash { get => this._hash; 
                         set
                             {
                                 this._hash = value;

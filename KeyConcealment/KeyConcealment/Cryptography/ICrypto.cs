@@ -89,9 +89,6 @@ public interface ICrypto
     /// <c>nonce</c>, <c>keySalt</c> or <c>tag</c> is null
     /// </exception>
     string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag);
-    
-    // string encryptRSA();
-    // string decryptRSA();
 
     /// <summary>
     /// List containing all previously used nonce values as base 64 strings

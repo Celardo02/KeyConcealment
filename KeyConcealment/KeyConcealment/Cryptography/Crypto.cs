@@ -9,8 +9,6 @@ namespace KeyConcealment.Cryptography;
 public class Crypto : ICrypto
 {
     #region attributes
-    // class used to calculate hashes and as key derivation function (KDF)
-    Rfc2898DeriveBytes? _derBy;
     // AES calculator
     private AesGcm? _aes;
     private RandomNumberGenerator _rng;
@@ -91,11 +89,8 @@ public class Crypto : ICrypto
         // adding the newly generated salt value to the old ones
         this._oldSalts.Add(salt,salt);
 
-        // creating the object that will provide the hash
-        this._derBy = new Rfc2898DeriveBytes(input, saltByte, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
-
-        // returning the hash 
-        return Convert.ToBase64String(this._derBy.GetBytes(hashLen));
+        // calculating an hash "hashLen" long and returning it
+        return Convert.ToBase64String(Rfc2898DeriveBytes.Pbkdf2(input, saltByte, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, hashLen));
     }
 
     public string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag)
@@ -116,10 +111,7 @@ public class Crypto : ICrypto
         if(tagByte.Length != TAG_SIZE)
             throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
 
-        // initializing the KDF algorithm
-        this._derBy = new Rfc2898DeriveBytes(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
-
-        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN),TAG_SIZE);
+        this._aes = new AesGcm(Rfc2898DeriveBytes.Pbkdf2(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, AES_PWD_LEN),TAG_SIZE);
         this._aes.Decrypt(nonceByte, cypheredByte, tagByte, plainByte);
 
         return Encoding.UTF8.GetString(plainByte);
@@ -143,10 +135,6 @@ public class Crypto : ICrypto
         // adding the newly generated salt value to the old ones
         this._oldSalts.Add(keySalt, keySalt);
 
-
-        // initializing the KDF algorithm
-        this._derBy = new Rfc2898DeriveBytes(key, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg); 
-
         // checking nonce array size
         if(nonce.Length != NONCE_SIZE)
             throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
@@ -161,7 +149,7 @@ public class Crypto : ICrypto
         this._oldNonces.Add(nonce, nonce);
 
         // extracting a 256 bits (32 bytes) key with this._derBy.GetBytes(32) 
-        this._aes = new AesGcm(this._derBy.GetBytes(AES_PWD_LEN), TAG_SIZE);
+        this._aes = new AesGcm(Rfc2898DeriveBytes.Pbkdf2(key, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, AES_PWD_LEN), TAG_SIZE);
         this._aes.Encrypt(nonceByte, plainBytes, cypheredBytes, tagByte);
 
         return Convert.ToBase64String(cypheredBytes);
@@ -177,9 +165,7 @@ public class Crypto : ICrypto
         byte[] saltBytes = Convert.FromBase64String(salt);
         byte[] hashByte = Convert.FromBase64String(hash);
 
-        this._derBy = new Rfc2898DeriveBytes(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg);
-
-        return hashByte.SequenceEqual(this._derBy.GetBytes(hash.Length));
+        return hashByte.SequenceEqual(Rfc2898DeriveBytes.Pbkdf2(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, hash.Length));
     }
     #endregion
 

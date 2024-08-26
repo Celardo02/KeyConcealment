@@ -79,7 +79,7 @@ public class Crypto : ICrypto
     #endregion
 
     #region ICripto methods
-    public string CalculateHash(string input, ref string salt, ushort hashLen = 64)
+    public string CalculateHash(string input, ref string salt, ushort hashLen = SALT_LEN)
     {
         byte[] saltByte = new byte[SALT_LEN]; 
 

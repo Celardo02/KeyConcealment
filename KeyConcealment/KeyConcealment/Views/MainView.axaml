@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:KeyConcealment.ViewModels"
+             xmlns:vm="using:KeyConcealment.ViewModels"
+             xmlns:models="clr-namespace:KeyConcealment.Domain"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="KeyConcealment.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -12,5 +13,41 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <UserControl.Styles>
+        <StyleInclude Source="/Assets/ViewStyles/MainViewStyle.axaml" />
+  </UserControl.Styles>
+
+  <SplitView 
+        IsPaneOpen="{Binding IsMenuOp}">
+            <SplitView.Pane>
+                <StackPanel
+                    Classes="StackMenu">
+                        <Button 
+                            Classes="ToggleMenu"
+                            Command="{Binding ToggleMenuCommand}">
+                                <PathIcon Data="{StaticResource LineHorizontal3Regular}" />
+                        </Button>
+                        <ListBox 
+                            Classes = "MenuItems"
+                            ItemsSource="{Binding Templates}"
+                            SelectedItem="{Binding SelObj}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:TemplateMenuObj}">
+                                        <StackPanel>
+                                            <PathIcon Data="{Binding Icon}"/>
+                                            <TextBlock Text="{Binding Label}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                        </ListBox>
+              </StackPanel>
+            </SplitView.Pane>
+
+            <SplitView.Content>
+                <Border>
+                        <TransitioningContentControl Content="{Binding CurrentPag}" />
+                </Border>
+            </SplitView.Content>
+  </SplitView>
+
 </UserControl>

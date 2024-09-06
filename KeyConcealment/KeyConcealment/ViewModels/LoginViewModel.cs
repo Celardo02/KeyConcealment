@@ -2,7 +2,7 @@ using System;
 
 namespace KeyConcealment.ViewModels;
 
-public class LoginViewModel
+public class LoginViewModel : ViewModelBase
 {
 
 }

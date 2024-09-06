@@ -2,7 +2,7 @@ using System;
 
 namespace KeyConcealment.ViewModels;
 
-public class SyncViewModel
+public class SyncViewModel : ViewModelBase
 {
 
 }

@@ -9,6 +9,11 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaXaml Remove="Assets/Icons.axaml" />
+    <AvaloniaXaml Remove="Assets/ViewStyles/MainViewStyle.axaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />

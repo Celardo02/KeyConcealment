@@ -40,6 +40,8 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                         </ListBox>
+                        <Button Classes="ToggleMenu" Command="{Binding AddCommand}"></Button>
+                        <Button Classes="ToggleMenu" Command="{Binding VeroCommand}"></Button>
               </StackPanel>
             </SplitView.Pane>
 

@@ -13,7 +13,8 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private ViewModelBase _currentPag;
 
-    private readonly ObservableCollection<TemplateMenuObj> _templates; 
+    [ObservableProperty]
+    private ObservableCollection<TemplateMenuObj> _templates; 
 
     // allows to know it the side menu is opened or closed
     [ObservableProperty]
@@ -23,19 +24,26 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     private TemplateMenuObj? _selObj;
 
+    // true if the user logged in; false otherwise
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AddCommand))]
+    private bool _isUserLoggedIn;
+
     public MainViewModel()
     {
-        _currentPag = new LoginViewModel();
-        _isMenuOp = false;
-        _templates = new ObservableCollection<TemplateMenuObj>(
+        this._currentPag = new LoginViewModel();
+        this._isMenuOp = false;
+        this._isUserLoggedIn = false;
+        this._templates = new ObservableCollection<TemplateMenuObj>(
             [
                 new TemplateMenuObj(typeof(LoginViewModel), "PersonAccountsRegular", "Login"),
-                new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
-                new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
-                new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
+                // new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
+                // new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
+                // new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
                 
             ]);
-        _selObj = Templates.First(vm => vm.Model == typeof(LoginViewModel));
+        this._selObj = Templates.First(vm => vm.Model == typeof(LoginViewModel));
+
     }
 
     partial void OnSelObjChanged(TemplateMenuObj? value)
@@ -52,8 +60,32 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleMenu()
     {
-        IsMenuOp = !IsMenuOp;
+        this.IsMenuOp = !this.IsMenuOp;
     }
 
-    public ObservableCollection<TemplateMenuObj> Templates { get => _templates; }
+    [RelayCommand(CanExecute = nameof(LoggedIn))]
+    private void Add()
+    {
+        if(this.IsUserLoggedIn)
+            this.Templates = new ObservableCollection<TemplateMenuObj>(
+                [
+                    new TemplateMenuObj(typeof(LoginViewModel), "PersonAccountsRegular", "Login"),
+                    new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
+                    new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
+                    new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
+                    
+                ]);
+    }
+
+    [RelayCommand]
+    private void Vero()
+    {
+        this.IsUserLoggedIn = true;
+    }
+
+    private bool LoggedIn()
+    {
+        return this.IsUserLoggedIn;
+    }
+
 }

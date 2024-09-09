@@ -2,7 +2,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:KeyConcealment.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KeyConcealment.Views.LoginView">
-  Loginview
+             x:Class="KeyConcealment.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:LoginViewModel />
+  </Design.DataContext>
+
+  <UserControl.Styles>
+        <StyleInclude Source="/Assets/ViewStyles/CommonViewStyle.axaml" />
+        <StyleInclude Source="/Assets/ViewStyles/LoginViewStyle.axaml" />
+  </UserControl.Styles>
+
+  <DockPanel>
+      <TextBlock 
+            Name = "Title"
+            Text = "Key Concealment Login"
+      />
+
+      <StackPanel>
+            <TextBox
+                  Name = "InsPwd"
+                  Watermark = "Master Password"
+                  Text = "{Binding InsPwd}">
+            </TextBox>
+
+            <Button
+                  Name = "Login"
+                  Content = "LOGIN"
+                  Command = "{Binding LoginCommand}"
+            />
+      </StackPanel>
+  </DockPanel>
+
 </UserControl>

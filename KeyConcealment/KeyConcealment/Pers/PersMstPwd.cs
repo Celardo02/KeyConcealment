@@ -62,7 +62,7 @@ public class PersMstPwd : IPersMstPwd
     {
         // checking if a master password exists yet
         if(this._mPwd == null)
-            throw new PersExc("Master password does not exist yet. Please, create a new master password");
+            throw new PersExc("Master password does not exist yet. Please, create a new vault");
         
         // computing insPwd hash and comparing it with this._mPwd.Hash 
         return this._crypt.VerifyString(insPwd,this._mPwd.Hash, this._mPwd.Salt);
@@ -71,7 +71,7 @@ public class PersMstPwd : IPersMstPwd
     public bool CheckMasterPwdExp()
     {
         if(this._mPwd == null)
-            throw new PersExc("Master password does not exist yet. Please, create a new master password");
+            throw new PersExc("Master password does not exist yet. Please, create a new vault");
 
         return DateTime.Today > this._mPwd.Exp;
     }

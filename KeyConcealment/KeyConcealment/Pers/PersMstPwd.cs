@@ -42,7 +42,7 @@ public class PersMstPwd : IPersMstPwd
         this._crypt = Crypto.Instance;
     }
 
-    public PersMstPwd Instance
+    public static PersMstPwd Instance
     {
         get 
         {

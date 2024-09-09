@@ -17,25 +17,55 @@
         <StyleInclude Source="/Assets/ViewStyles/LoginViewStyle.axaml" />
   </UserControl.Styles>
 
-  <DockPanel>
+  <StackPanel>
       <TextBlock 
-            Name = "Title"
+            Classes = "Title"
             Text = "Key Concealment Login"
       />
 
-      <StackPanel>
-            <TextBox
-                  Name = "InsPwd"
-                  Watermark = "Master Password"
-                  Text = "{Binding InsPwd}">
-            </TextBox>
+      <Border
+            Classes = "BoxStackPan">
+            <StackPanel>
 
-            <Button
-                  Name = "Login"
-                  Content = "LOGIN"
-                  Command = "{Binding LoginCommand}"
-            />
-      </StackPanel>
-  </DockPanel>
+
+                  <TextBox
+                        Classes = "Pwd"
+                        Watermark = "Master Password"
+                        Text = "{Binding InsPwd}">
+                  </TextBox>
+
+                  <Button
+                        Classes = "ConfirmButton"
+                        Content = "LOGIN"
+                        Command = "{Binding LoginCommand}"
+                  />
+            </StackPanel>
+      </Border>
+
+
+      <TextBlock 
+            Classes = "Title"
+            Text = "Never Logged In? Create a Vault!"
+      />
+
+      <Border 
+            Classes = "BoxStackPan">
+            <StackPanel>
+
+                  <TextBox
+                        Classes = "Pwd"
+                        Watermark = "New Master Password"
+                        Text = "{Binding NewPwd}">
+                  </TextBox>
+
+                  <Button
+                        Classes = "ConfirmButton"
+                        Content = "CREATE NEW VAULT"
+                        Command = "{Binding CreateVaultCommand}"
+                  />
+            </StackPanel>
+      </Border>
+      
+  </StackPanel>
 
 </UserControl>

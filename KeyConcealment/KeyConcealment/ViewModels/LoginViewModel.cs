@@ -11,6 +11,11 @@ public partial class LoginViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoginCommand))]
     private string? _insPwd;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CreateVaultCommand))]
+    private string? _newPwd;
+
     private IService _s;
     #endregion
 
@@ -26,15 +31,28 @@ public partial class LoginViewModel : ViewModelBase
     }
     #endregion 
 
+    #region relay commands
     [RelayCommand(CanExecute = nameof(this.IsPasswordInserted))]
     private void Login()
     {
         this._s.Login(InsPwd);
     }
 
+    [RelayCommand(CanExecute = nameof(this.IsNewPasswordInserted))]
+    private void CreateVault()
+    {
+        this._s.CreateVault(this.NewPwd);
+    }
+    #endregion
+
     private bool IsPasswordInserted()
     {
-        return !string.IsNullOrEmpty(InsPwd);
+        return !string.IsNullOrEmpty(this.InsPwd);
+    }
+
+    private bool IsNewPasswordInserted()
+    {
+        return !string.IsNullOrEmpty(this.NewPwd);
     }
 
 }

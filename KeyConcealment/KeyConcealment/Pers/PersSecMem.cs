@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 
@@ -12,9 +13,12 @@ namespace KeyConcealment.Pers;
 /// </summary>
 public static class PersSecMem<K,V> where V : ICred<K>
 {
+    #region attributes
     private static ICrypto? _crypto;
+    private const string VAULT_NAME = "KeyConcealmentVault.enc";
+    #endregion
 
-     /// <summary>
+    /// <summary>
     /// Saves the current persistences content inside a file
     /// </summary>
     /// <param name="path">path where to save the file</param>
@@ -56,6 +60,19 @@ public static class PersSecMem<K,V> where V : ICred<K>
         *  - key must be checked against masterPwd hash to verify if it is correct or 
         *    not
         */
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Checks if a vault exists at a specified path
+    /// </summary>
+    /// <param name="path">path where the vault may be found</param>
+    /// <returns>
+    /// <c>True</c> if the vault exists; <c>False</c> otherwise
+    /// </returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static bool ValutExists(string path)
+    {        
         throw new NotImplementedException();
     }
 }

@@ -45,10 +45,15 @@ public class Handler : IService
     #region IService methods
     public void Login(string insPwd)
     {
-        if(this._persMastPwd.VerifyInsertedPwd(insPwd))
-            this._mvm.IsUserLoggedIn = true;
-        else 
-            this.ShowMessage("Error","Inserted password is not correct. Please, try again.", Icon.Error);
+        try{
+            if(this._persMastPwd.VerifyInsertedPwd(insPwd))
+                this._mvm.IsUserLoggedIn = true;
+            else 
+                this.ShowMessage("Error","Inserted password is not correct. Please, try again.", Icon.Error);
+        } catch(PersExc e)
+        {
+            this.ShowMessage("Error", e.Message, Icon.Error);
+        }
 
     }
 
@@ -60,10 +65,21 @@ public class Handler : IService
         //throw new NotImplementedException();
     }
 
+    public void CreateVault(string mstPwd)
+    {
+        /*
+        *   Reminder: 
+        *   this method needs to check wheter a vault already exists or not and create 
+        *   a new vault ONLY in the second case
+        */
+        throw new NotImplementedException();
+    }
+
     public void ShowMessage(string title, string msg,Icon i = Icon.None, ButtonEnum b = ButtonEnum.Ok)
     {
         MessageBoxManager.GetMessageBoxStandard(title, msg, b, i).ShowAsync();
     }
+
     #endregion
 
     public MainViewModel Mvm {set => this._mvm = value;}

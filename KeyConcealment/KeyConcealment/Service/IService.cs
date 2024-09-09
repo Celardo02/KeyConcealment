@@ -21,6 +21,12 @@ public interface IService
     void Logout();
 
     /// <summary>
+    /// Creates and initialize a new vault only if there isn't already an existing one
+    /// </summary>
+    /// <param name="mstPwd">master password to be used for the vault</param>
+    void CreateVault(string mstPwd);
+
+    /// <summary>
     /// Shows a popup with specified message and buttons
     /// </summary>
     /// <param name="title">popup window title</param>

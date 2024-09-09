@@ -14,22 +14,23 @@
   </Design.DataContext>
 
   <UserControl.Styles>
+        <StyleInclude Source="/Assets/ViewStyles/CommonViewStyle.axaml" />
         <StyleInclude Source="/Assets/ViewStyles/MainViewStyle.axaml" />
   </UserControl.Styles>
 
   <SplitView 
-        IsPaneOpen="{Binding IsMenuOp}">
+        IsPaneOpen="{Binding IsMenuOpen}">
             <SplitView.Pane>
                 <StackPanel
                     Classes="StackMenu">
                         <Button 
-                            Classes="ToggleMenu"
+                            Classes="MenuButton"
                             Command="{Binding ToggleMenuCommand}">
-                                <PathIcon Data="{StaticResource LineHorizontal3Regular}" />
+                                <PathIcon Name="ToggleMenuIcon" Data="{StaticResource LineHorizontal3Regular}" />
                         </Button>
                         <ListBox 
                             Classes = "MenuItems"
-                            ItemsSource="{Binding Templates}"
+                            ItemsSource="{Binding CurrentTemplate}"
                             SelectedItem="{Binding SelObj}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:TemplateMenuObj}">
@@ -40,8 +41,11 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Classes="ToggleMenu" Command="{Binding AddCommand}"></Button>
-                        <Button Classes="ToggleMenu" Command="{Binding VeroCommand}"></Button>
+                        <Button 
+                            Classes="MenuButton" 
+                            Command="{Binding LogoutCommand}">
+                                <PathIcon Data="{StaticResource PowerRegular}" />
+                        </Button>
               </StackPanel>
             </SplitView.Pane>
 

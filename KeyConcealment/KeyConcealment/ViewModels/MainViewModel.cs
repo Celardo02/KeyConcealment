@@ -4,21 +4,27 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyConcealment.Domain;
+using KeyConcealment.Service;
 
 namespace KeyConcealment.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    #region attributes
     // allows to show different GUIs inside the main view
     [ObservableProperty]
     private ViewModelBase _currentPag;
 
     [ObservableProperty]
-    private ObservableCollection<TemplateMenuObj> _templates; 
+    private ObservableCollection<TemplateMenuObj> currentTemplate; 
+
+    private ObservableCollection<TemplateMenuObj> _loginTemplate;
+
+    private ObservableCollection<TemplateMenuObj> _loggedTemplate;
 
     // allows to know it the side menu is opened or closed
     [ObservableProperty]
-    private bool _isMenuOp;
+    private bool _isMenuOpen;
 
     // keeps track of the selected object in the side menu
     [ObservableProperty]
@@ -26,25 +32,68 @@ public partial class MainViewModel : ViewModelBase
 
     // true if the user logged in; false otherwise
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddCommand))]
+    [NotifyCanExecuteChangedFor(nameof(this.LogoutCommand))]
     private bool _isUserLoggedIn;
+
+    private readonly IService _s;
+
+    #endregion
+
+    #region Constructors
+
+    public MainViewModel(IService s)
+    {
+        this._s = s;
+        this.Init();
+    }
 
     public MainViewModel()
     {
-        this._currentPag = new LoginViewModel();
-        this._isMenuOp = false;
-        this._isUserLoggedIn = false;
-        this._templates = new ObservableCollection<TemplateMenuObj>(
+        this._s = Handler.Instance;
+        this.Init();
+    }
+
+    private void Init()
+    {
+        this._s.Mvm = this;
+
+        this._loginTemplate = new ObservableCollection<TemplateMenuObj>(
             [
                 new TemplateMenuObj(typeof(LoginViewModel), "PersonAccountsRegular", "Login"),
-                // new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
-                // new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
-                // new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
-                
             ]);
-        this._selObj = Templates.First(vm => vm.Model == typeof(LoginViewModel));
+        
+        this._loggedTemplate = new ObservableCollection<TemplateMenuObj>(
+            [
+                new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
+                new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
+                new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
+            ]);
+
+        this.CurrentPag = new LoginViewModel();
+        this.IsMenuOpen = false;
+        this.IsUserLoggedIn = false;
+        this.CurrentTemplate = this._loginTemplate;
+        this.SelObj = CurrentTemplate.First(vm => vm.Model == typeof(LoginViewModel));
 
     }
+
+    #endregion
+
+    #region Relay command
+
+    [RelayCommand]
+    private void ToggleMenu()
+    {
+        this.IsMenuOpen = !this.IsMenuOpen;
+    }
+
+    [RelayCommand(CanExecute = nameof(this.IsUserLoggedIn))]
+    private void Logout()
+    {
+        this._s.Logout();
+    }
+
+    #endregion
 
     partial void OnSelObjChanged(TemplateMenuObj? value)
     {
@@ -57,35 +106,20 @@ public partial class MainViewModel : ViewModelBase
         this.CurrentPag = viewModBase;
     }
 
-    [RelayCommand]
-    private void ToggleMenu()
+    partial void OnIsUserLoggedInChanged(bool value)
     {
-        this.IsMenuOp = !this.IsMenuOp;
-    }
-
-    [RelayCommand(CanExecute = nameof(LoggedIn))]
-    private void Add()
-    {
-        if(this.IsUserLoggedIn)
-            this.Templates = new ObservableCollection<TemplateMenuObj>(
-                [
-                    new TemplateMenuObj(typeof(LoginViewModel), "PersonAccountsRegular", "Login"),
-                    new TemplateMenuObj(typeof(MasterViewModel), "KeyRegular", "Master password"),
-                    new TemplateMenuObj(typeof(CredsViewModel), "PasswordRegular", "Credential sets"),
-                    new TemplateMenuObj(typeof(SyncViewModel), "arrowSyncRegular", "Data syncing"),
-                    
-                ]);
-    }
-
-    [RelayCommand]
-    private void Vero()
-    {
-        this.IsUserLoggedIn = true;
-    }
-
-    private bool LoggedIn()
-    {
-        return this.IsUserLoggedIn;
+        if(value)
+        {
+            // shows all password manager functionalities
+            this.CurrentTemplate = this._loggedTemplate;
+            this.SelObj = this.CurrentTemplate.First(vm => vm.Model == typeof(CredsViewModel));
+        }
+        else 
+        {
+            // shows login interface
+            this.CurrentTemplate = this._loginTemplate;
+            this.SelObj = this.CurrentTemplate.First(vm => vm.Model == typeof(LoginViewModel));
+        }
     }
 
 }

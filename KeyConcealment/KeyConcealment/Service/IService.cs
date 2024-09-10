@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using KeyConcealment.ViewModels;
 using MsBox.Avalonia.Enums;
 
@@ -27,13 +28,19 @@ public interface IService
     void CreateVault(string mstPwd);
 
     /// <summary>
+    /// Resets all vault content by deleting the encrypted file used to store 
+    /// everything
+    /// </summary>
+    void ResetVault();
+
+    /// <summary>
     /// Shows a popup with specified message and buttons
     /// </summary>
     /// <param name="title">popup window title</param>
     /// <param name="msg">message to be displayed</param>
     /// <param name="i">icon to be shown</param>
     /// <param name="b">buttons to be shown</param>
-    void ShowMessage(string title, string msg, Icon i, ButtonEnum b);
+    Task<ButtonResult> ShowMessage(string title, string msg, Icon i, ButtonEnum b);
 
     /// <summary>
     /// Sets the MainViewModel instance linked to the Service class

@@ -1,8 +1,12 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Avalonia.Controls;
 using KeyConcealment.Domain;
 using KeyConcealment.Pers;
 using KeyConcealment.ViewModels;
 using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 
 namespace KeyConcealment.Service;
@@ -75,9 +79,17 @@ public class Handler : IService
         throw new NotImplementedException();
     }
 
-    public void ShowMessage(string title, string msg,Icon i = Icon.None, ButtonEnum b = ButtonEnum.Ok)
+    public async void ResetVault()
     {
-        MessageBoxManager.GetMessageBoxStandard(title, msg, b, i).ShowAsync();
+        
+        if( await this.ShowMessage("Warning","Resetting the vault implies removing each credential set that has been stored. You will NOT be able to get back any data you are about to delete.\nDo you want to proceed anyway?",Icon.Warning,ButtonEnum.YesNo) == ButtonResult.Yes)
+            // deletion operations of the encrypted file have to be put here
+            throw new NotImplementedException();
+    }
+
+    public Task<ButtonResult> ShowMessage(string title, string msg,Icon i = Icon.None, ButtonEnum b = ButtonEnum.Ok)
+    {
+        return MessageBoxManager.GetMessageBoxStandard(title, msg, b, i).ShowAsync();
     }
 
     #endregion

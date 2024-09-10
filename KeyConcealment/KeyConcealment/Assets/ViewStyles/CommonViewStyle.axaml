@@ -5,7 +5,7 @@
         
     <Style Selector="Button">
         <Setter Property="Background" Value="#61ABC6"/>
-        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Foreground" Value="#1E1E1E"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>

@@ -114,6 +114,7 @@ public class Crypto : ICrypto
         this._aes = new AesGcm(Rfc2898DeriveBytes.Pbkdf2(key,Convert.FromBase64String(keySalt), PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, AES_PWD_LEN),TAG_SIZE);
         this._aes.Decrypt(nonceByte, cypheredByte, tagByte, plainByte);
 
+        this._aes.Dispose();
         return Encoding.UTF8.GetString(plainByte);
     }
 
@@ -151,6 +152,8 @@ public class Crypto : ICrypto
         // extracting a 256 bits (32 bytes) key with this._derBy.GetBytes(32) 
         this._aes = new AesGcm(Rfc2898DeriveBytes.Pbkdf2(key, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, AES_PWD_LEN), TAG_SIZE);
         this._aes.Encrypt(nonceByte, plainBytes, cypheredBytes, tagByte);
+
+        this._aes.Dispose();
 
         return Convert.ToBase64String(cypheredBytes);
     }

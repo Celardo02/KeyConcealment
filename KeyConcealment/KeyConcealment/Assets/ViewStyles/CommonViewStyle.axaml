@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        
    <!-- buttons common style -->
         
     <Style Selector="Button">
@@ -7,7 +8,7 @@
         <Setter Property="Foreground" Value="#000000"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 
     <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
@@ -20,4 +21,8 @@
     </Style>
 
     <!-- ***************** -->
+
+    <Style Selector="Separator">
+        <Setter Property="Margin" Value="25 25 25 25"/>
+    </Style>
 </Styles>

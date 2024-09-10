@@ -43,6 +43,12 @@ public partial class LoginViewModel : ViewModelBase
     {
         this._s.CreateVault(this.NewPwd);
     }
+
+    [RelayCommand]
+    private void ResetVault()
+    {
+        this._s.ResetVault();
+    }
     #endregion
 
     private bool IsPasswordInserted()

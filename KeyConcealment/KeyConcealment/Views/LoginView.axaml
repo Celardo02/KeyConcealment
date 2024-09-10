@@ -16,56 +16,66 @@
         <StyleInclude Source="/Assets/ViewStyles/CommonViewStyle.axaml" />
         <StyleInclude Source="/Assets/ViewStyles/LoginViewStyle.axaml" />
   </UserControl.Styles>
+  
+  <ScrollViewer>
+      <StackPanel>
+          <TextBlock 
+                Classes = "Title"
+                Text = "Key Concealment Login"
+          />
 
-  <StackPanel>
-      <TextBlock 
-            Classes = "Title"
-            Text = "Key Concealment Login"
-      />
-
-      <Border
-            Classes = "BoxStackPan">
-            <StackPanel>
-
-
-                  <TextBox
-                        Classes = "Pwd"
-                        Watermark = "Master Password"
-                        Text = "{Binding InsPwd}">
-                  </TextBox>
-
-                  <Button
-                        Classes = "ConfirmButton"
-                        Content = "LOGIN"
-                        Command = "{Binding LoginCommand}"
-                  />
-            </StackPanel>
-      </Border>
+          <Border
+                Classes = "BoxStackPan">
+                <StackPanel>
 
 
-      <TextBlock 
-            Classes = "Title"
-            Text = "Never Logged In? Create a Vault!"
-      />
+                      <TextBox
+                            Classes = "Pwd"
+                            Watermark = "Master Password"
+                            Text = "{Binding InsPwd}">
+                      </TextBox>
 
-      <Border 
-            Classes = "BoxStackPan">
-            <StackPanel>
+                      <Button
+                            Classes = "ConfirmButton"
+                            Content = "LOGIN"
+                            Command = "{Binding LoginCommand}"
+                      />
+                </StackPanel>
+          </Border>
 
-                  <TextBox
-                        Classes = "Pwd"
-                        Watermark = "New Master Password"
-                        Text = "{Binding NewPwd}">
-                  </TextBox>
 
-                  <Button
-                        Classes = "ConfirmButton"
-                        Content = "CREATE NEW VAULT"
-                        Command = "{Binding CreateVaultCommand}"
-                  />
-            </StackPanel>
-      </Border>
-      
-  </StackPanel>
+          <TextBlock 
+                Classes = "Title"
+                Text = "Never Logged In? Create a Vault!"
+          />
 
+          <Border 
+                Classes = "BoxStackPan">
+                <StackPanel>
+
+                      <TextBox
+                            Classes = "Pwd"
+                            Watermark = "New Master Password"
+                            Text = "{Binding NewPwd}">
+                      </TextBox>
+
+                      <Button
+                            Classes = "ConfirmButton"
+                            Content = "CREATE NEW VAULT"
+                            Command = "{Binding CreateVaultCommand}"
+                      />
+                </StackPanel>
+          </Border>
+
+          <Separator/>
+
+          <Button
+                  Name = "ResetButton"
+                  Classes = "ConfirmButton"
+                  Content = "RESET VAULT"
+                  Command = "{Binding ResetVaultCommand}"
+            />
+
+      </StackPanel>
+  </ScrollViewer>
 </UserControl>

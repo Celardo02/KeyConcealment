@@ -65,7 +65,7 @@ public class PersMstPwd : IPersMstPwd
             throw new PersExc("Master password does not exist yet. Please, create a new vault");
         
         // computing insPwd hash and comparing it with this._mPwd.Hash 
-        return this._crypt.VerifyString(insPwd,this._mPwd.Hash, this._mPwd.Salt);
+        return this._crypt.VerifyHash(insPwd,this._mPwd.Hash, this._mPwd.Salt);
     }
 
     public bool CheckMasterPwdExp()
@@ -101,7 +101,7 @@ public class PersMstPwd : IPersMstPwd
             + LOW_CASE + " lower case character(s).");
 
         // calculating the hash and updating salt value
-        newPwdHash = this._crypt.CalculateHash(newPwd, ref salt);
+        newPwdHash = this._crypt.ComputeHash(newPwd, ref salt);
         // creating new master password object
         this._mPwd = new MasterPwd(newPwdHash,salt);
              

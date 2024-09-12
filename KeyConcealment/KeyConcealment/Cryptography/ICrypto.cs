@@ -17,7 +17,7 @@ public interface ICrypto
     /// <returns>
     /// Returns a base 64 string containing the password hash
     /// </returns>
-    string CalculateHash(string input, ref string salt, ushort hashLen = 64);
+    string ComputeHash(string input, ref string salt, ushort hashLen = 64);
 
     /// <summary>
     /// Checks if a string hash correspond to a previosly computed hash
@@ -30,7 +30,7 @@ public interface ICrypto
     /// <returns>
     /// Returns <c>true</c> if <c>str</c> hash and <c>hash</c> are the same; <c>false</c> otherwise
     /// </returns>
-    bool VerifyString(string str, string hash, string salt);
+    bool VerifyHash(string str, string hash, string salt);
 
     /// <summary>
     /// Encrypts a plain text string using a given key. Nonce and tag will be filled 
@@ -89,6 +89,48 @@ public interface ICrypto
     /// <c>nonce</c>, <c>keySalt</c> or <c>tag</c> is null
     /// </exception>
     string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag);
+
+    /// <summary>
+    /// Encrypt a string using given RSA public key
+    /// </summary>
+    /// <param name="plain">plain text to be encrypted</param>
+    /// <param name="Mod">base 64 string containing modulus of the RSA public key</param>
+    /// <param name="Exp">base 64 string containing public exponent of the RSA public key</param>
+    /// <returns>
+    /// Returns a base 64 string with the encyphered text
+    /// </returns>
+    string EncryptRSA(string plain, string Mod, string Exp);
+
+    /// <summary>
+    /// Decrypts a base 64 string containing pieces of information encrypted with 
+    /// current device public key
+    /// </summary>
+    /// <param name="cyphered">cyphered base 64 string</param>
+    /// <returns>
+    /// Returns a plain text string
+    /// </returns>
+    string DecryptRSA(string cyphered);
+
+    /// <summary>
+    /// Signs a string with current device RSA private key
+    /// </summary>
+    /// <param name="data">data to be signed</param>
+    /// <returns>
+    /// Returns a base 64 string containing a signed SHA 512 hash of <c>data</c>
+    /// </returns>
+    string SignRSA(string data);
+
+    /// <summary>
+    /// Checks whether an RSA digital signature is valid or not
+    /// </summary>
+    /// <param name="data">data to be checked against the sign</param>
+    /// <param name="sign">sign of <c>data</c></param>
+    /// <param name="Mod">base 64 string containing modulus of the RSA public key</param>
+    /// <param name="Exp">base 64 string containing public exponent of the RSA public key</param>
+    /// <returns>
+    /// Returns <c>True</c> if the signature is valid; otherwise, <c>False</c>
+    /// </returns>
+    bool VerifyRSA(string data, string sign, string Mod, string Exp);
 
     /// <summary>
     /// List containing all previously used nonce values as base 64 strings

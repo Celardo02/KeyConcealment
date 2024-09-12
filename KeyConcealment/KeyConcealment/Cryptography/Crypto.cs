@@ -69,7 +69,7 @@ public class Crypto : ICrypto
         this._oldSalts = new Dictionary<string, string>();
         // IMPORTANT: 
         // remember to change PBKDF2_WORK_FACTOR value when changing the hash algorithm
-        // As a good advice, OWASP provides a cheat sheet for that
+        // OWASP provides a cheat sheet for that
         this._PBKDF2HashAlg = HashAlgorithmName.SHA3_512;
     }
 
@@ -127,6 +127,9 @@ public class Crypto : ICrypto
         // byte array that will contain Aes tag value
         byte[] tagByte;
 
+        if(string.IsNullOrEmpty(cyphered))
+            throw new CryptoArgExc("Input cyphered text is null or empty");
+
         // checking nonce array size
         if(nonceByte.Length != NONCE_SIZE)
             throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
@@ -159,6 +162,8 @@ public class Crypto : ICrypto
         // byte array that will contain Aes tag value
         byte[] tagByte;
 
+        if(string.IsNullOrEmpty(plain))
+            throw new CryptoArgExc("Input plain text is null or empty");
 
         // checking nonce array size
         if(nonce.Length != NONCE_SIZE)
@@ -194,25 +199,110 @@ public class Crypto : ICrypto
     }
     #endregion
 
-    public string EncryptRSA(string plain, string Mod, string Exp)
+    #region RSA methods
+    public string EncryptRSA(string plain, string mod, string exp)
     {
-        throw new NotImplementedException();
+        // temporary service provider that will be initialized with recipient public key 
+        RSACryptoServiceProvider rsa;
+        // struct that will contain recipient public key parameters
+        RSAParameters rsaPar;
+        // plain text byte encoding
+        byte[] plainByte;
+        // byte array that will contain encrypted plain text
+        byte[] cypheredByte;
+
+        if(string.IsNullOrEmpty(plain))
+            throw new CryptoArgExc("Input plain text is null or empty");
+
+        if(string.IsNullOrEmpty(mod))
+            throw new CryptoArgExc("Input RSA modulus is null or empty");
+        
+        if(string.IsNullOrEmpty(exp))
+            throw new CryptoArgExc("Input RSA public exponent is null or empty");
+
+        plainByte = Encoding.UTF8.GetBytes(plain);
+
+        // create new 
+        rsa = new RSACryptoServiceProvider();
+        rsaPar = new RSAParameters();
+        rsaPar.Modulus = Convert.FromBase64String(mod);
+        rsaPar.Exponent = Convert.FromBase64String(exp);
+
+
+        //Import the RSA Key information to include public key pieces of information
+        rsa.ImportParameters(rsaPar);
+
+        //Encrypt the passed byte array and specify OAEP padding.  
+        //OAEP padding is only available on Microsoft Windows XP or
+        //later. Given that, it is always set to false  
+        cypheredByte = rsa.Encrypt(plainByte,false); 
+
+        
+        return Convert.ToBase64String(cypheredByte);
+
     }
 
     public string DecryptRSA(string cyphered)
     {
-        throw new NotImplementedException();
+        // byte array that will contain cyphered text 
+        byte[] cypheredByte;
+        // byte array that will contain plain text 
+        byte[] plainByte;
+
+        if(string.IsNullOrEmpty(cyphered))
+            throw new CryptoArgExc("Input cyphered text is null or empty");
+
+        if (this._rsa == null)
+            throw new CryptoExc("RSA service is not initialized yet. No private key found.");
+
+        cypheredByte = Convert.FromBase64String(cyphered);
+
+        //Decrypt the passed byte array and specify OAEP padding.  
+        //OAEP padding is only available on Microsoft Windows XP or
+        //later. Given that, it is always set to false  
+        plainByte = this._rsa.Decrypt(cypheredByte, false);
+        
+        return Encoding.UTF8.GetString(plainByte);
     }
 
     public string SignRSA(string data)
     {
-        throw new NotImplementedException();
+        if(this._rsa == null)
+            throw new CryptoExc("RSA service is not initialized yet. No private key found.");
+
+        if(string.IsNullOrEmpty(data))
+            throw new CryptoArgExc("Input string is null or empty");
+
+        return Convert.ToBase64String(this._rsa.SignData(Convert.FromBase64String(data),SHA512.Create()));
     }
 
-    public bool VerifyRSA(string data, string sign, string Mod, string Exp)
+    public bool VerifyRSA(string data, string sign, string mod, string exp)
     {
-        throw new NotImplementedException();
+        RSACryptoServiceProvider rsa;
+        RSAParameters rsaParam;
+
+        if(string.IsNullOrEmpty(data))
+            throw new CryptoArgExc("Input data string is null or empty");
+
+        if(string.IsNullOrEmpty(sign))
+            throw new CryptoArgExc("Input sign string is null or empty");
+
+        if(string.IsNullOrEmpty(mod))
+            throw new CryptoArgExc("Input RSA modulus is null or empty");
+        
+        if(string.IsNullOrEmpty(exp))
+            throw new CryptoArgExc("Input RSA public exponent is null or empty");
+
+        rsa = new RSACryptoServiceProvider();
+        rsaParam = new RSAParameters();
+
+        rsaParam.Modulus = Convert.FromBase64String(mod);
+        rsaParam.Exponent = Convert.FromBase64String(exp);
+        rsa.ImportParameters(rsaParam);
+
+        return rsa.VerifyData(Convert.FromBase64String(data),SHA512.Create(),Convert.FromBase64String(sign));
     }
+    #endregion
 
     public List<string> OldNonces {get => this._oldNonces.Values.ToList();}
 

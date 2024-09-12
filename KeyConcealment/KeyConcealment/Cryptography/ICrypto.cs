@@ -51,7 +51,8 @@ public interface ICrypto
     /// Nonce array must be 12 bytes long and tag array must be 16 bytes long
     /// </remarks>
     /// <exception cref="CryptoArgExc">
-    /// Throws <c>CryptoArgExc</c> exception if nonce or tag array length oes not 
+    /// Throws <c>CryptoArgExc</c> exception if <c>plain</c> is null or empty or 
+    /// if at least one between <c>nonce</c> and <c>tag</c> array length does not 
     /// match the right dimension. Respectively, 12 bytes and 16 bytes
     /// </exception>
     /// <exception cref="CryptographicException">
@@ -77,7 +78,8 @@ public interface ICrypto
     /// Nonce array must be 12 bytes long and tag array must be 16 bytes long
     /// </remarks>
     /// <exception cref="CryptoArgExc">
-    /// Throws <c>CryptoArgExc</c> exception if nonce or tag array length does not 
+    /// Throws <c>CryptoArgExc</c> exception if <c>plain</c> is null or empty or 
+    /// if at least one between <c>nonce</c> and <c>tag</c> array length does not 
     /// match the right dimension. Respectively, 12 bytes and 16 bytes
     /// </exception>
     /// <exception cref="CryptographicException">
@@ -99,7 +101,15 @@ public interface ICrypto
     /// <returns>
     /// Returns a base 64 string with the encyphered text
     /// </returns>
-    string EncryptRSA(string plain, string Mod, string Exp);
+    /// <exception cref="CryptographicException">
+    /// Throws <c>CryptographicException</c> exception if <c>plain</c> is longer than 
+    /// maximum allowed length
+    /// </exception>
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if at least one between <c>plain</c>, 
+    /// <c>mod</c> and <c>exp</c> is null or empty
+    /// </exception>
+    string EncryptRSA(string plain, string mod, string exp);
 
     /// <summary>
     /// Decrypts a base 64 string containing pieces of information encrypted with 
@@ -109,27 +119,50 @@ public interface ICrypto
     /// <returns>
     /// Returns a plain text string
     /// </returns>
+    /// <exception cref="CryptographicException">
+    /// Throws <c>CryptographicException</c> exception if private key does not match the 
+    /// encrypted data
+    /// </exception>
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if <c>cyphered</c> is null or empty
+    /// </exception>
+    /// <exception cref="CryptoExc">
+    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// </exception>
     string DecryptRSA(string cyphered);
 
     /// <summary>
-    /// Signs a string with current device RSA private key
+    /// Signs a base 64 string with current device RSA private key
     /// </summary>
-    /// <param name="data">data to be signed</param>
+    /// <param name="data">base 64 string containing data to be signed</param>
     /// <returns>
     /// Returns a base 64 string containing a signed SHA 512 hash of <c>data</c>
     /// </returns>
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if <c>data</c> is null or empty
+    /// </exception>
+    /// <exception cref="CryptoExc">
+    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// </exception>
     string SignRSA(string data);
 
     /// <summary>
     /// Checks whether an RSA digital signature is valid or not
     /// </summary>
-    /// <param name="data">data to be checked against the sign</param>
-    /// <param name="sign">sign of <c>data</c></param>
+    /// <param name="data">base 64 string to be checked against the sign</param>
+    /// <param name="sign">base 64 string containing sign of <c>data</c></param>
     /// <param name="Mod">base 64 string containing modulus of the RSA public key</param>
     /// <param name="Exp">base 64 string containing public exponent of the RSA public key</param>
     /// <returns>
     /// Returns <c>True</c> if the signature is valid; otherwise, <c>False</c>
     /// </returns>
+    /// <exception cref="CryptoArgExc">
+    /// Throws <c>CryptoArgExc</c> exception if at least one between <c>data</c>, 
+    /// <c>sign</c>, <c>mod</c> and <c>exp</c> is null or empty
+    /// </exception>
+    /// <exception cref="CryptoExc">
+    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// </exception>
     bool VerifyRSA(string data, string sign, string Mod, string Exp);
 
     /// <summary>

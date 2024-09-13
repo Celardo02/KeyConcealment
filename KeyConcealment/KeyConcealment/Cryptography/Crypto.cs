@@ -94,7 +94,7 @@ public class Crypto : ICrypto
     #region Hash methods
     public string ComputeHash(string input, ref string salt, ushort hashLen = SALT_LEN)
     {
-        byte[] saltByte = new byte[SALT_LEN]; 
+        byte[] saltByte; 
 
         saltByte = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
 

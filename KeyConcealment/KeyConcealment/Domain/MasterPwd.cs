@@ -36,4 +36,9 @@ public class MasterPwd : IMasterPwd
                         }
     public string Salt{get => this._salt; set => this._salt = value;}
     public DateTime Exp { get => this._exp;}
+
+    public override string ToString()
+    {
+        return this.Hash + "," + this.Salt + "," + this.Exp.ToString("dd/MM/yyyy");
+    }
 }

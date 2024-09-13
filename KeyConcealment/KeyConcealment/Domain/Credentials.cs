@@ -60,4 +60,9 @@ public class Credentials : ICred<string>
     public string EncSalt {get => this._encSalt; set => this._encSalt = value;}
     public DateTime Exp {get => this._exp;}
     #endregion
+
+    public override string ToString()
+    {
+        return this.Id + "," + this.Usr + "," + this.Mail + "," + this.Pwd + "," + this.EncNonce + "," + this.EncTag + "," + this.EncSalt + "," + this.Exp.ToString("dd/MM/yyyy");
+    }
 }

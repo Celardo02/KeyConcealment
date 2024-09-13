@@ -93,6 +93,24 @@ public interface ICrypto
     string DecryptAES_GMC(string cyphered, string key, string keySalt, string nonce, string tag);
 
     /// <summary>
+    /// Initializes an RSA service provider
+    /// </summary>
+    /// <exception cref="CryptographicException">
+    /// Throws <c>CryptographicException</c> exception if RSA service provider can not 
+    /// be acquired
+    /// </exception>
+    void InitRSA();
+
+    /// <summary>
+    /// Disposes current RSA service provider
+    /// </summary>
+    /// <exception cref="CryptoExc">
+    /// Throws <c>CryptoExc</c> exception if Throws <c>CryptoExc</c> exception if RSA 
+    /// service provider hasn't been initilized yet
+    /// </exception>
+    void DisposeRSA();
+
+    /// <summary>
     /// Encrypt a string using given RSA public key
     /// </summary>
     /// <param name="plain">plain text to be encrypted</param>
@@ -127,7 +145,7 @@ public interface ICrypto
     /// Throws <c>CryptoArgExc</c> exception if <c>cyphered</c> is null or empty
     /// </exception>
     /// <exception cref="CryptoExc">
-    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// Throws <c>CryptoExc</c> exception if RSA service provider hasn't been initilized yet
     /// </exception>
     string DecryptRSA(string cyphered);
 
@@ -142,7 +160,7 @@ public interface ICrypto
     /// Throws <c>CryptoArgExc</c> exception if <c>data</c> is null or empty
     /// </exception>
     /// <exception cref="CryptoExc">
-    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// Throws <c>CryptoExc</c> exception if RSA service provider hasn't been initilized yet
     /// </exception>
     string SignRSA(string data);
 
@@ -161,7 +179,7 @@ public interface ICrypto
     /// <c>sign</c>, <c>mod</c> and <c>exp</c> is null or empty
     /// </exception>
     /// <exception cref="CryptoExc">
-    /// Throws <c>CryptoExc</c> exception if RSA service hasn't been initilized yet
+    /// Throws <c>CryptoExc</c> exception if RSA service provider hasn't been initilized yet
     /// </exception>
     bool VerifyRSA(string data, string sign, string Mod, string Exp);
 

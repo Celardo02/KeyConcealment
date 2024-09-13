@@ -200,6 +200,20 @@ public class Crypto : ICrypto
     #endregion
 
     #region RSA methods
+
+    public void InitRSA()
+    {
+        this._rsa = new RSACryptoServiceProvider(RSA_KEYS_LEN);
+    }
+
+    public void DisposeRSA()
+    {
+        if(this._rsa == null)
+            throw new CryptoExc("RSA service is not initialized yet. Dispose action is not possible.");
+            
+        this._rsa.Dispose();
+    }
+
     public string EncryptRSA(string plain, string mod, string exp)
     {
         // temporary service provider that will be initialized with recipient public key 

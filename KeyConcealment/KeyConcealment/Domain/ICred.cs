@@ -41,5 +41,5 @@ public interface ICred<ID>
     /// <summary>
     /// expiration date: date after which the app advise/force the user to change the password
     /// </summary>
-    DateTime Exp {get;}
+    DateTime Exp {get; set;}
 }

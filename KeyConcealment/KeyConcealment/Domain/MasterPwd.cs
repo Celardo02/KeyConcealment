@@ -19,11 +19,18 @@ public class MasterPwd : IMasterPwd
         this.Hash = hash;
         this.Salt = salt;
     }
+
+    public MasterPwd(string hash, string salt, DateTime exp)
+    {
+        this._hash = hash;
+        this._exp = exp;
+        this.Salt = salt;
+    }
     public MasterPwd(IMasterPwd mp)
     {
         this._hash = mp.Hash;
         this._exp = mp.Exp;
-        this._salt = mp.Salt;
+        this.Salt = mp.Salt;
     }
     #endregion
     public string Hash { get => this._hash; 
@@ -35,7 +42,7 @@ public class MasterPwd : IMasterPwd
                             } 
                         }
     public string Salt{get => this._salt; set => this._salt = value;}
-    public DateTime Exp { get => this._exp;}
+    public DateTime Exp { get => this._exp; set => this._exp = value;}
 
     public override string ToString()
     {

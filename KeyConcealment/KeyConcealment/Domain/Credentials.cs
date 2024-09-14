@@ -30,6 +30,18 @@ public class Credentials : ICred<string>
         this.EncSalt = encSalt;
     }
 
+    public Credentials(string id, string pwd, string encNonce, string encTag, string encSalt, DateTime exp, string? mail = null, string? usr = null)
+    {
+        this.Id = id;
+        this.Usr = usr;
+        this.Mail = mail;
+        this._pwd = pwd;
+        this._exp = exp;
+        this.EncNonce = encNonce;
+        this.EncTag = encTag;
+        this.EncSalt = encSalt;
+    }
+
     public Credentials(ICred<string> c)
     {
         this.Id = c.Id;
@@ -58,11 +70,11 @@ public class Credentials : ICred<string>
     public string EncNonce {get => this._encNonce; set => this._encNonce = value;}
     public string EncTag {get => this._encTag; set => this._encTag = value;}
     public string EncSalt {get => this._encSalt; set => this._encSalt = value;}
-    public DateTime Exp {get => this._exp;}
+    public DateTime Exp {get => this._exp; set => this._exp = value;}
     #endregion
 
     public override string ToString()
     {
-        return this.Id + "," + this.Usr + "," + this.Mail + "," + this.Pwd + "," + this.EncNonce + "," + this.EncTag + "," + this.EncSalt + "," + this.Exp.ToString("dd/MM/yyyy");
+        return this.Id + "," + this.Pwd + "," + this.EncNonce + "," + this.EncTag + "," + this.EncSalt + "," + this.Exp.ToString("dd/MM/yyyy") + "," + this.Mail + "," + this.Usr;
     }
 }

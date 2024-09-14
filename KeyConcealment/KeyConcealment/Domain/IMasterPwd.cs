@@ -22,5 +22,5 @@ public interface IMasterPwd
     /// <summary>
     /// expiration date of the master password
     /// </summary>
-    DateTime Exp {get;}
+    DateTime Exp {get; set;}
 }

@@ -152,6 +152,21 @@ public static class PersSecMem
     }
 
     /// <summary>
+    /// Deletes vault file
+    /// </summary>
+    /// <exception cref="PersExcNotFound">
+    /// Throws <c>PersExcNotFound</c> exception if vault does not exist
+    /// </exception>
+    public static void Delete()
+    {
+        // checking if the vault exists
+        if(!ValutExists())
+            throw new PersExcNotFound("Vault loading operations failed: vault file does not exist yet.");
+
+        File.Delete(DefinePath());
+    }
+
+    /// <summary>
     /// Defines vault file path depending on running Operating System
     /// </summary>
     /// <returns>

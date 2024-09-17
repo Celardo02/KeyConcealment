@@ -47,29 +47,27 @@ public static class PersSecMem
         foreach(ICred<string> c in creds)
             vaultContent += c.ToString() + ";";
 
-        if(!string.IsNullOrEmpty(vaultContent))
-        {
+        if(vaultContent.EndsWith(';'))
             // removing last ';' character
             vaultContent = vaultContent.Remove(vaultContent.Length - 1);
-            vaultContent += "\n";
-        }
+        
+        vaultContent += "\n";
 
         // adding all nonces 
         foreach(string n in oldNonces)
             vaultContent += n + ";";
         
-        if(!string.IsNullOrEmpty(vaultContent))
-        {
+        if(vaultContent.EndsWith(';'))
             // removing last ';' character
             vaultContent = vaultContent.Remove(vaultContent.Length - 1);
-            vaultContent += "\n";
-        }
+        
+        vaultContent += "\n";
 
         // adding all salts
         foreach(string s in oldSalts)
             vaultContent += s + ";";
 
-        if(!string.IsNullOrEmpty(vaultContent))
+        if(vaultContent.EndsWith(';'))
             // removing last ';' character
             vaultContent = vaultContent.Remove(vaultContent.Length - 1);
 
@@ -140,13 +138,13 @@ public static class PersSecMem
         oldSalts = new List<string>();
 
         // loading into method params vault data
-        foreach(string c in credsString.Split(";"))
+        foreach(string c in credsString.Split(";", StringSplitOptions.RemoveEmptyEntries))
             creds.Add(new Credentials(c.Split(",")[0], c.Split(",")[1], c.Split(",")[2], c.Split(",")[3], c.Split(",")[4], DateTime.Parse(c.Split(",")[5]) , c.Split(",")[6], c.Split(",")[7]));
         
-        foreach(string n in oldNoncesString.Split(";"))
+        foreach(string n in oldNoncesString.Split(";", StringSplitOptions.RemoveEmptyEntries))
             oldNonces.Add(n);
 
-        foreach(string s in oldSaltsString.Split(";"))
+        foreach(string s in oldSaltsString.Split(";", StringSplitOptions.RemoveEmptyEntries))
             oldSalts.Add(s);
 
         masterPwd = GetMasterPwd();

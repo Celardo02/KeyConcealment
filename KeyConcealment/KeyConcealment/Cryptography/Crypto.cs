@@ -111,7 +111,7 @@ public class Crypto : ICrypto
         byte[] saltBytes = Convert.FromBase64String(salt);
         byte[] hashByte = Convert.FromBase64String(hash);
 
-        return hashByte.SequenceEqual(Rfc2898DeriveBytes.Pbkdf2(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, hash.Length));
+        return hashByte.SequenceEqual(Rfc2898DeriveBytes.Pbkdf2(str, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, hashByte.Length));
     }
     #endregion 
 

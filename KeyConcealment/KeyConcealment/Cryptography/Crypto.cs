@@ -165,18 +165,11 @@ public class Crypto : ICrypto
         if(string.IsNullOrEmpty(plain))
             throw new CryptoArgExc("Input plain text is null or empty");
 
-        // checking nonce array size
-        if(nonce.Length != NONCE_SIZE)
-            throw new CryptoArgExc("Nonce array length must be 12 bytes (96 bits)");
-        
-        // checking tag array size
-        if(tag.Length != TAG_SIZE)
-            throw new CryptoArgExc("Tag array length must be 16 bytes (128 bits)");
-
         // converting plain text in a byte array
         plainBytes = Encoding.UTF8.GetBytes(plain);
         // creating the array that will contain the cyphered text
         cypheredBytes = new byte[plainBytes.Length];
+        
         tagByte = new byte[TAG_SIZE];
 
         saltBytes = this.GenerateNewByteArray(SALT_LEN, this._oldSalts);
@@ -192,6 +185,8 @@ public class Crypto : ICrypto
         // extracting a 256 bits (32 bytes) key with this._derBy.GetBytes(32) 
         this._aes = new AesGcm(Rfc2898DeriveBytes.Pbkdf2(key, saltBytes, PBKDF2_WORK_FACTOR, this._PBKDF2HashAlg, AES_KEY_LEN), TAG_SIZE);
         this._aes.Encrypt(nonceByte, plainBytes, cypheredBytes, tagByte);
+
+        tag = Convert.ToBase64String(tagByte);
 
         this._aes.Dispose();
 

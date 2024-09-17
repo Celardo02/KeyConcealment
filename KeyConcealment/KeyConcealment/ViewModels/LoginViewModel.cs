@@ -42,6 +42,7 @@ public partial class LoginViewModel : ViewModelBase
     private void CreateVault()
     {
         this._s.CreateVault(this.NewPwd);
+        this.NewPwd = "";
     }
 
     [RelayCommand]

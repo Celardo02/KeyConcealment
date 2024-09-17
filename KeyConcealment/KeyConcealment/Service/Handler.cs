@@ -136,6 +136,8 @@ public class Handler : IService
             try
             {
                 this._persMastPwd.SetNewMasterPwd(newPwd);
+                // Encrypting all credential sets passwords with the new master password
+                this._persCreds.UpdateCredsEncryption(oldPwd,newPwd);
                 this.ShowMessage("Info", "Password changed successfully.", Icon.Success);
             }
             catch(PersExc e)

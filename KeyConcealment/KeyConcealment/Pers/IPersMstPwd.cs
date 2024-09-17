@@ -45,5 +45,5 @@ public interface IPersMstPwd
 
     // setter is realised with another method because it has to take a string as 
     // input instead of an IMasterPwd? object
-    IMasterPwd? MPwd {get;}
+    IMasterPwd? MPwd {get; set;}
 }

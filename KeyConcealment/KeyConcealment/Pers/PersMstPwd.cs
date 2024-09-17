@@ -76,7 +76,7 @@ public class PersMstPwd : IPersMstPwd
         return DateTime.Today > this._mPwd.Exp;
     }
 
-    public IMasterPwd? MPwd {get => this._mPwd;}
+    public IMasterPwd? MPwd {get => this._mPwd; set => this._mPwd = value; }
 
     public void SetNewMasterPwd(string newPwd)
     {

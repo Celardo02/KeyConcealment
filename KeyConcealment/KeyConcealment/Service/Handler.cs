@@ -48,6 +48,8 @@ public class Handler : IService
 
 
     #region IService methods
+
+    #region login methods
     public void Login(string insPwd)
     {
         IMasterPwd? mp = null;
@@ -89,7 +91,9 @@ public class Handler : IService
         else 
             this.ShowMessage("Error","Main view is not set. Login can not be performed.", Icon.Error);
     }
+    #endregion
 
+    #region Vault managing
     public void CreateVault(string mstPwd)
     {
         if(!PersSecMem.ValutExists())
@@ -97,7 +101,7 @@ public class Handler : IService
             {
                 this._persMastPwd.SetNewMasterPwd(mstPwd);
                 PersSecMem.Save(mstPwd,this._persMastPwd.MPwd,this._persCreds.ListAll(),this._crypto.OldNonces,this._crypto.OldSalts);
-                this.ShowMessage("Info", "Vault created succesfully", Icon.Info);
+                this.ShowMessage("Info", "Vault created successfully", Icon.Success);
             } 
             catch(PersExc e)
             {
@@ -123,6 +127,31 @@ public class Handler : IService
             }
              
     }
+
+    #region master password
+
+    public void SetMasterPwd(string oldPwd, string newPwd)
+    {
+        if(this._persMastPwd.VerifyInsertedPwd(oldPwd))
+            try
+            {
+                this._persMastPwd.SetNewMasterPwd(newPwd);
+                this.ShowMessage("Info", "Password changed successfully.", Icon.Success);
+            }
+            catch(PersExc e)
+            {
+                this.ShowMessage("Error", e.Message, Icon.Error);
+            }
+        else 
+            this.ShowMessage("Error", "Old master password is incorrect.", Icon.Error);
+    }
+
+    public string? GetMasterPwdExp()
+    {
+        return this._persMastPwd.MPwd?.Exp.ToString("dd/MM/yyyy");
+    }
+    #endregion
+    #endregion
 
     public Task<ButtonResult> ShowMessage(string title, string msg,Icon i = Icon.None, ButtonEnum b = ButtonEnum.Ok)
     {

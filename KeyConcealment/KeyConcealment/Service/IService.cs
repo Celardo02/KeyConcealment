@@ -9,6 +9,7 @@ namespace KeyConcealment.Service;
 /// </summary>
 public interface IService
 {
+    #region login methods
     /// <summary>
     /// Checks if the inserted password correspond to the master password. If it does, 
     /// all the password manager content becomes avilable
@@ -20,7 +21,9 @@ public interface IService
     /// Logs out from the password manager
     /// </summary>
     void Logout();
+    #endregion
 
+    #region vault managing methods
     /// <summary>
     /// Creates and initialize a new vault only if there isn't already an existing one
     /// </summary>
@@ -32,6 +35,25 @@ public interface IService
     /// everything
     /// </summary>
     void ResetVault();
+
+    #region master password 
+    /// <summary>
+    /// Allows to set new master password
+    /// </summary>
+    /// <param name="oldPwd">old master password</param>
+    /// <param name="newPwd">new master password</param>
+    public void SetMasterPwd(string oldPwd, string newPwd);
+
+    /// <summary>
+    /// Gets master password expiration date
+    /// </summary>
+    /// <returns>
+    /// Returns the expiration date of the master password in dd/MM/yyyy format or 
+    /// <c>null</c> if the master password hasn't been set yet
+    /// </returns>
+    public string? GetMasterPwdExp();
+    #endregion
+    #endregion
 
     /// <summary>
     /// Shows a popup with specified message and buttons

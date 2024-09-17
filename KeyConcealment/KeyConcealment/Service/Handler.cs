@@ -89,7 +89,7 @@ public class Handler : IService
         if(this._mvm != null)
             this._mvm.IsUserLoggedIn = false;
         else 
-            this.ShowMessage("Error","Main view is not set. Login can not be performed.", Icon.Error);
+            this.ShowMessage("Error","Main view is not set. Logout can not be performed.", Icon.Error);
     }
     #endregion
 

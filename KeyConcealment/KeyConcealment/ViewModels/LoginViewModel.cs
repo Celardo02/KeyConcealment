@@ -36,6 +36,7 @@ public partial class LoginViewModel : ViewModelBase
     private void Login()
     {
         this._s.Login(InsPwd);
+        this.InsPwd = "";
     }
 
     [RelayCommand(CanExecute = nameof(this.IsNewPasswordInserted))]

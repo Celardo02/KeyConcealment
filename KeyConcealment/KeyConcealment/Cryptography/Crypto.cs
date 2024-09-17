@@ -318,9 +318,27 @@ public class Crypto : ICrypto
     }
     #endregion
 
-    public List<string> OldNonces {get => this._oldNonces.Values.ToList();}
+    public List<string> OldNonces {get => this._oldNonces.Values.ToList();
+                                    set 
+                                        {
+                                            this._oldNonces.Clear();
 
-    public List<string> OldSalts {get => this._oldSalts.Values.ToList();}
+                                            foreach(string s in value)
+                                                this._oldNonces.Add(s,s);
+
+                                        }
+                                    }
+
+    public List<string> OldSalts {get => this._oldSalts.Values.ToList();
+                                    set 
+                                        {
+                                            this._oldSalts.Clear();
+
+                                            foreach(string s in value)
+                                                this._oldSalts.Add(s,s);
+
+                                        }
+                                    }
 
 
     

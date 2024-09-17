@@ -186,10 +186,10 @@ public interface ICrypto
     /// <summary>
     /// List containing all previously used nonce values as base 64 strings
     /// </summary>
-    List<string> OldNonces {get;}
+    List<string> OldNonces {get; set;}
 
     /// <summary>
     /// List containing all previously used salt values as base 64 strings
     /// </summary>
-    List<string> OldSalts {get;}
+    List<string> OldSalts {get; set;}
 }

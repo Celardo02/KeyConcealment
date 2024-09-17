@@ -95,7 +95,7 @@ public class PersMstPwd : IPersMstPwd
         if(!CheckPwdReq(newPwd))
             throw new PersExc("Insert password is too weak. A valid password must contain at least: \n\t - " 
             + LEN + " total characters;\n\t - " 
-            + SPEC_CHAR + " special character(s);\n\t - "
+            + SPEC_CHAR + " special character(s) between : "+ALLOWED_SPEC_CHAR+";\n\t - "
             + NUMS + " number(s);\n\t - "
             + UP_CASE + " upper case character(s); \n\t - "
             + LOW_CASE + " lower case character(s).");

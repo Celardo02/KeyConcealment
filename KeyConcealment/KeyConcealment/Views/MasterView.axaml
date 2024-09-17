@@ -57,6 +57,12 @@
                             Text = "{Binding NewPwd}">
                       </TextBox>
 
+                      <TextBox
+                            Classes = "Pwd"
+                            Watermark = "Confirm New Master Password"
+                            Text = "{Binding ConfNewPwd}">
+                      </TextBox>
+
                       <Button
                             Classes = "ConfirmButton"
                             Content = "CHANGE MASTER PASSWORD"

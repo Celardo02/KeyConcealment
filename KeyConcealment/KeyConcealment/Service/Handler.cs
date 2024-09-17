@@ -1,12 +1,10 @@
-using System;
-using System.Threading;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Avalonia.Controls;
+using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 using KeyConcealment.Pers;
 using KeyConcealment.ViewModels;
 using MsBox.Avalonia;
-using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 
 namespace KeyConcealment.Service;
@@ -16,9 +14,11 @@ public class Handler : IService
     #region attributes
     private readonly IPersMstPwd _persMastPwd;
     private readonly IPersCred<string,ICred<string>> _persCreds;
+    private readonly ICrypto _crypto;
 
 
-    MainViewModel? _mvm;
+
+    private MainViewModel? _mvm;
     #endregion
 
     #region singleton
@@ -29,6 +29,7 @@ public class Handler : IService
     {
         this._persMastPwd = PersMstPwd.Instance;
         this._persCreds = PersCred.Instance;
+        this._crypto = Crypto.Instance;
     }
 
     public static Handler Instance {
@@ -49,42 +50,78 @@ public class Handler : IService
     #region IService methods
     public void Login(string insPwd)
     {
-        try{
-            if(this._persMastPwd.VerifyInsertedPwd(insPwd))
-                this._mvm.IsUserLoggedIn = true;
-            else 
-                this.ShowMessage("Error","Inserted password is not correct. Please, try again.", Icon.Error);
-        } catch(PersExc e)
-        {
-            this.ShowMessage("Error", e.Message, Icon.Error);
-        }
+        IMasterPwd? mp = null;
+        List<ICred<string>>? lc = null;
+        List<string>? lon = null;
+        List<string>? los = null;
+
+        if(this._mvm != null)
+            try{
+                mp = PersSecMem.GetMasterPwd();
+                if(this._crypto.VerifyHash(insPwd, mp.Hash, mp.Salt))
+                {
+                    PersSecMem.Load(insPwd, ref mp, ref lc, ref lon, ref los);
+                    this._persMastPwd.MPwd = mp;
+
+                    foreach(ICred<string> c in lc)
+                        this._persCreds.Create(c);
+                    
+                    this._crypto.OldNonces = lon;
+                    this._crypto.OldSalts = los;
+
+                    this._mvm.IsUserLoggedIn = true;
+                }
+                else 
+                    this.ShowMessage("Error","Inserted password is not correct. Please, try again.", Icon.Error);
+            } catch(PersExc e)
+            {
+                this.ShowMessage("Error", e.Message, Icon.Error);
+            }
+        else 
+            this.ShowMessage("Error","Main view is not set. Login can not be performed.", Icon.Error);
 
     }
 
     public void Logout()
     {
-        // TODO: use this._mvm to update _isUserLoggedIn in order to change the menu sidebar
-        
-        this._mvm.IsUserLoggedIn = false;
-        //throw new NotImplementedException();
+        if(this._mvm != null)
+            this._mvm.IsUserLoggedIn = false;
+        else 
+            this.ShowMessage("Error","Main view is not set. Login can not be performed.", Icon.Error);
     }
 
     public void CreateVault(string mstPwd)
     {
-        /*
-        *   Reminder: 
-        *   this method needs to check wheter a vault already exists or not and create 
-        *   a new vault ONLY in the second case
-        */
-        throw new NotImplementedException();
+        if(!PersSecMem.ValutExists())
+            try
+            {
+                this._persMastPwd.SetNewMasterPwd(mstPwd);
+                PersSecMem.Save(mstPwd,this._persMastPwd.MPwd,this._persCreds.ListAll(),this._crypto.OldNonces,this._crypto.OldSalts);
+                this.ShowMessage("Info", "Vault created succesfully", Icon.Info);
+            } 
+            catch(PersExc e)
+            {
+                this.ShowMessage("Error", e.Message, Icon.Error);
+            }
+
+        else 
+            this.ShowMessage("Error","Vault file found. To create new vault, reset the existing one first.", Icon.Error);
+
     }
 
     public async void ResetVault()
     {
         
         if( await this.ShowMessage("Warning","Resetting the vault implies removing each credential set that has been stored. You will NOT be able to get back any data you are about to delete.\nDo you want to proceed anyway?",Icon.Warning,ButtonEnum.YesNo) == ButtonResult.Yes)
-            // deletion operations of the encrypted file have to be put here
-            throw new NotImplementedException();
+            try
+            {
+                PersSecMem.Delete();
+            }
+            catch(PersExcNotFound e)
+            {
+                this.ShowMessage("Error",e.Message, Icon.Error);
+            }
+             
     }
 
     public Task<ButtonResult> ShowMessage(string title, string msg,Icon i = Icon.None, ButtonEnum b = ButtonEnum.Ok)

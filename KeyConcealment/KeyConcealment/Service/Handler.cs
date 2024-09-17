@@ -120,6 +120,8 @@ public class Handler : IService
             try
             {
                 PersSecMem.Delete();
+                this._persCreds.DropContent();
+                this._persMastPwd.DropContent();
             }
             catch(PersExcNotFound e)
             {
@@ -138,6 +140,8 @@ public class Handler : IService
                 this._persMastPwd.SetNewMasterPwd(newPwd);
                 // Encrypting all credential sets passwords with the new master password
                 this._persCreds.UpdateCredsEncryption(oldPwd,newPwd);
+                // saving changes inside vault file
+                PersSecMem.Save(newPwd,this._persMastPwd.MPwd,this._persCreds.ListAll(),this._crypto.OldNonces,this._crypto.OldSalts);
                 this.ShowMessage("Info", "Password changed successfully.", Icon.Success);
             }
             catch(PersExc e)

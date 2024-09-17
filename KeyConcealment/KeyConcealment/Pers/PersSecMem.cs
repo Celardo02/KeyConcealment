@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 
@@ -148,7 +149,28 @@ public static class PersSecMem
         foreach(string s in oldSaltsString.Split(";"))
             oldSalts.Add(s);
 
-        masterPwd = new MasterPwd(mstPwdString.Split(",")[0],mstPwdString.Split(",")[1],DateTime.Parse(mstPwdString.Split(",")[2]));
+        masterPwd = GetMasterPwd();
+    }
+
+    
+    /// <summary>
+    /// Gets master password data from the vault file
+    /// </summary>
+    /// <returns>
+    /// Returns a master password class instance with all read data 
+    /// </returns>
+    /// <exception cref="PersExcNotFound">
+    /// Throws <c>PersExcNotFound</c> exception if vault file does not exist
+    /// </exception>
+    public static IMasterPwd GetMasterPwd()
+    {
+        // checking if the vault exists
+        if(!ValutExists())
+            throw new PersExcNotFound("Vault loading operations failed: vault file does not exist yet.");
+        
+        string mstPwd = File.ReadLines(DefinePath()).First();
+
+        return new MasterPwd(mstPwd.Split(",")[0],mstPwd.Split(",")[1],DateTime.Parse(mstPwd.Split(",")[2]));
     }
 
     /// <summary>

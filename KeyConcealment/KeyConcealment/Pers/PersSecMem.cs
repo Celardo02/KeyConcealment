@@ -46,23 +46,31 @@ public static class PersSecMem
         foreach(ICred<string> c in creds)
             vaultContent += c.ToString() + ";";
 
-        // removing last ';' character
-        vaultContent = vaultContent.Remove(vaultContent.Length - 1);
-        vaultContent += "\n";
+        if(!string.IsNullOrEmpty(vaultContent))
+        {
+            // removing last ';' character
+            vaultContent = vaultContent.Remove(vaultContent.Length - 1);
+            vaultContent += "\n";
+        }
 
         // adding all nonces 
         foreach(string n in oldNonces)
             vaultContent += n + ";";
         
-        // removing last ';' character
-        vaultContent = vaultContent.Remove(vaultContent.Length - 1);
-        vaultContent += "\n";
+        if(!string.IsNullOrEmpty(vaultContent))
+        {
+            // removing last ';' character
+            vaultContent = vaultContent.Remove(vaultContent.Length - 1);
+            vaultContent += "\n";
+        }
 
         // adding all salts
         foreach(string s in oldSalts)
             vaultContent += s + ";";
-        // removing last ';' character
-        vaultContent = vaultContent.Remove(vaultContent.Length - 1);
+
+        if(!string.IsNullOrEmpty(vaultContent))
+            // removing last ';' character
+            vaultContent = vaultContent.Remove(vaultContent.Length - 1);
 
         cryp = Crypto.Instance;
 
@@ -73,6 +81,9 @@ public static class PersSecMem
 
         // adding master password data on top of everything
         vaultContent = masterPwd.ToString() + "\n" + vaultContent;
+
+        // creating the directory to contain the vault if it does not exist yet
+        Directory.CreateDirectory(Directory.GetParent(path).FullName);
 
         // saving the vault
         File.WriteAllText(path,vaultContent);

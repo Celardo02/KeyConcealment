@@ -124,5 +124,29 @@ public class PersCred : IPersCred<string, ICred<string>>
 
         return expired;
     }
+
+    public void UpdateCredsEncryption(string oldMasterPwd, string newMasterPwd)
+    {
+        ICred<string> c;
+        string nonce = "";
+        string tag = "";
+        string salt = "";
+
+        foreach (string key in this._credSets.Keys)
+        {
+            // getting the credential set corresponding to key
+            c = this._credSets[key];
+
+            // updating password encryption with the new key
+            c.Pwd = this._crypt.DecryptAES_GMC(c.Pwd,oldMasterPwd,c.EncSalt,c.EncNonce,c.EncTag);
+            c.Pwd = this._crypt.EncryptAES_GMC(c.Pwd,newMasterPwd,ref salt, ref nonce, ref tag);
+            c.EncSalt = salt;
+            c.EncNonce = nonce;
+            c.EncTag = tag;
+
+            // storing the updates
+            this._credSets[key] = c;
+        }
+    }
     #endregion
 }

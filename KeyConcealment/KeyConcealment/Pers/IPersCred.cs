@@ -87,4 +87,10 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// <returns>Returns an empty list if expired credential sets does NOT exist, a list with all 
     /// the expired credentials ids otherwise </returns>
     List<K> CheckCredExpiration();
+
+    /// <summary>
+    /// Updates each credential set password encryption using a new master password
+    /// </summary>
+    /// <param name="newMasterPwd">new master password</param>
+    void UpdateCredsEncryption(string oldMasterPwd, string newMasterPwd);
 }

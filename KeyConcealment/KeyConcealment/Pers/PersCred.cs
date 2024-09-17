@@ -74,9 +74,6 @@ public class PersCred : IPersCred<string, ICred<string>>
 
     public List<ICred<string>> ListAll()
     {
-        if(this._credSets.Count == 0)
-            throw new PersExc("Persistence is empty");
-
         return new List<ICred<string>>(this._credSets.Values.ToList());
     }
 

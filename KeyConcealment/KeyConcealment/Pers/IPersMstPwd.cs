@@ -43,6 +43,11 @@ public interface IPersMstPwd
     /// </exception>
     void SetNewMasterPwd(string newPwd);
 
+    /// <summary>
+    /// Deletes whole persistence content
+    /// </summary>
+    void DropContent();
+
     // setter is realised with another method because it has to take a string as 
     // input instead of an IMasterPwd? object
     IMasterPwd? MPwd {get; set;}

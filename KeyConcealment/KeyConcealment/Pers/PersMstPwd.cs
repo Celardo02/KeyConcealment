@@ -106,6 +106,11 @@ public class PersMstPwd : IPersMstPwd
         this._mPwd = new MasterPwd(newPwdHash,salt);
              
     }
+
+    public void DropContent()
+    {
+        this._mPwd = null;
+    }
     #endregion
 
     /// <summary>

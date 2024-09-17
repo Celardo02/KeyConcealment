@@ -72,6 +72,11 @@ public class PersCred : IPersCred<string, ICred<string>>
         this._credSets.Remove(id);
     }
 
+    public void DropContent()
+    {
+        this._credSets.Clear();
+    }
+
     public List<ICred<string>> ListAll()
     {
         return new List<ICred<string>>(this._credSets.Values.ToList());

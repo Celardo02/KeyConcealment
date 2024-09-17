@@ -65,6 +65,11 @@ public interface IPersCred<K,V> where V : ICred<K>
     void Delete(K id);
 
     /// <summary>
+    /// Deletes whole persistence content
+    /// </summary>
+    void DropContent();
+
+    /// <summary>
     /// Lists all the objects inside the persistence class
     /// </summary>
     /// <returns>Returns a <c>List</c> with all the object inside the presistence class</returns>

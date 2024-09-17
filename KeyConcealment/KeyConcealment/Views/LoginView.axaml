@@ -14,6 +14,7 @@
 
   <UserControl.Styles>
         <StyleInclude Source="/Assets/ViewStyles/CommonViewStyle.axaml" />
+        <StyleInclude Source="/Assets/ViewStyles/UserInputStyle.axaml" />
         <StyleInclude Source="/Assets/ViewStyles/LoginViewStyle.axaml" />
   </UserControl.Styles>
   

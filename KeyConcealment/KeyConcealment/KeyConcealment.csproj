@@ -13,6 +13,7 @@
   <ItemGroup>
     <AvaloniaXaml Remove="Assets/Icons.axaml" />
     <AvaloniaXaml Remove="Assets/ViewStyles/MainViewStyle.axaml" />
+    <AvaloniaXaml Remove="Assets/ViewStyles/UserInputStyle.axaml" />
   </ItemGroup>
 
   <ItemGroup>

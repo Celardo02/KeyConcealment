@@ -2,7 +2,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:KeyConcealment.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KeyConcealment.Views.MasterView">
-  masterview
+             x:Class="KeyConcealment.Views.MasterView"
+             x:DataType="vm:MasterViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MasterViewModel />
+  </Design.DataContext>
+
+  <UserControl.Styles>
+        <StyleInclude Source="/Assets/ViewStyles/CommonViewStyle.axaml" />
+        <StyleInclude Source="/Assets/ViewStyles/UserInputStyle.axaml" />
+        <StyleInclude Source="/Assets/ViewStyles/MasterViewStyle.axaml" />
+  </UserControl.Styles>
+
+  <ScrollViewer>
+      <StackPanel>
+          <Border
+                Classes = "BoxStackPan">
+            <StackPanel>
+              <TextBlock 
+                    Classes = "Title"
+                    Text = "Master Password Expiration Date"
+              />
+
+              <TextBlock
+                    Classes = "InfoText"
+                    Text = "{Binding Exp}"
+              />
+            </StackPanel>
+          </Border>
+
+
+          <TextBlock 
+                Classes = "Title"
+                Text = "Change Master Password"
+          />
+
+          <Border 
+                Classes = "BoxStackPan">
+                <StackPanel>
+
+                      <TextBox
+                            Classes = "Pwd"
+                            Watermark = "Old Master Password"
+                            Text = "{Binding OldPwd}">
+                      </TextBox>
+
+                      <TextBox
+                            Classes = "Pwd"
+                            Watermark = "New Master Password"
+                            Text = "{Binding NewPwd}">
+                      </TextBox>
+
+                      <Button
+                            Classes = "ConfirmButton"
+                            Content = "CHANGE MASTER PASSWORD"
+                            Command = "{Binding ChangePwdCommand}"
+                      />
+                </StackPanel>
+          </Border>
+
+      </StackPanel>
+  </ScrollViewer>
 </UserControl>

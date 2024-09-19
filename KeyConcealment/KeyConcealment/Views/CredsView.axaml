@@ -2,7 +2,59 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:KeyConcealment.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="KeyConcealment.Views.CredsView">
-  CredsView
+             x:Class="KeyConcealment.Views.CredsView"
+             x:DataType="vm:CredsViewModel">
+             
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:CredsViewModel />
+  </Design.DataContext>
+
+  
+
+  <ScrollViewer>
+        <StackPanel>
+              <DataGrid Margin="20" 
+                        ItemsSource="{Binding Creds}"
+                        SelectedItem="{Binding SelRow}"
+                        GridLinesVisibility="All"
+                        BorderThickness="1" BorderBrush="Black">
+                <DataGrid.Columns>
+                  <DataGridTextColumn Header="Id" Width="Auto"
+                     Binding="{Binding Id}" />
+
+                  <DataGridTextColumn Header="Username" Width="Auto"
+                     Binding="{Binding Usr}" />
+
+                  <DataGridTextColumn Header="E-mail" Width="Auto"
+                     Binding="{Binding Mail}" />
+
+                  <DataGridTemplateColumn Header="Copy Password">
+                      <DataGridTemplateColumn.CellTemplate>
+                          <DataTemplate>
+                              <Button Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordCopyCommand}"
+                                      CommandParameter="{Binding}"
+                                      Content="Copy"/>
+                          </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                  <DataGridTemplateColumn Header="Password Info">
+                      <DataGridTemplateColumn.CellTemplate>
+                          <DataTemplate>
+                              <Button Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordInfoCommand}"
+                                      CommandParameter="{Binding}"
+                                      Content="Info"/>
+                          </DataTemplate>
+                      </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+              </DataGrid> 
+        </StackPanel>
+  </ScrollViewer>
+
 </UserControl>

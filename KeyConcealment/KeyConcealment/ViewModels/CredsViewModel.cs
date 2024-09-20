@@ -11,11 +11,7 @@ public partial class CredsViewModel : ViewModelBase
 {
     #region attributes
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(ShowCredentialSetsCommand))]
     private ObservableCollection<ICred<string>> _creds;
-
-    [ObservableProperty]
-    private ICred<string> _selRow;
 
     // attributes to store new credentials data
     [ObservableProperty]
@@ -62,18 +58,22 @@ public partial class CredsViewModel : ViewModelBase
         Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
         Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
         Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
+        Creds.Add(new Credentials("test1","pwd1","","","","mail1","usr1"));
+        Creds.Add(new Credentials("test2","pwd2","","","","mail2","usr2"));
+        Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
+        Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
+        Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
+        Creds.Add(new Credentials("test1","pwd1","","","","mail1","usr1"));
+        Creds.Add(new Credentials("test2","pwd2","","","","mail2","usr2"));
+        Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
+        Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
+        Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
         // **************************
 
     }
     #endregion
 
     #region relay commands
-
-    [RelayCommand]
-    private void ShowCredentialSets()
-    {
-        throw new NotImplementedException();
-    }
 
     [RelayCommand(CanExecute = nameof(this.CheckNewCredsData))]
     private void AddCredentials()
@@ -90,6 +90,15 @@ public partial class CredsViewModel : ViewModelBase
     [RelayCommand]
     private void PasswordInfo(ICred<string> c)
     {
+        throw new NotImplementedException();
+    }
+
+    [RelayCommand]
+    private void SaveChanges(ICred<string> c)
+    {
+        /* REMINDER:
+        *  this methd needs to check is current c has any changes before saving new values
+        */
         throw new NotImplementedException();
     }
     

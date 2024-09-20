@@ -26,12 +26,12 @@
           />
 
           <Border
-                Classes = "BoxStackPan">
+                Classes = "Box">
                 <StackPanel>
 
 
                       <TextBox
-                            Classes = "Pwd"
+                            Classes = "UserData Pwd"
                             Watermark = "Master Password"
                             Text = "{Binding InsPwd}">
                       </TextBox>
@@ -51,11 +51,11 @@
           />
 
           <Border 
-                Classes = "BoxStackPan">
+                Classes = "Box">
                 <StackPanel>
 
                       <TextBox
-                            Classes = "Pwd"
+                            Classes = "UserData Pwd"
                             Watermark = "New Master Password"
                             Text = "{Binding NewPwd}">
                       </TextBox>

@@ -22,6 +22,15 @@
 
     <!-- ***************** -->
 
+    <!-- Border to create shadowed box -->
+    <Style Selector = "Border.Box">
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BoxShadow" Value="5 5 10 0 DarkGray"/>        
+    </Style>
+    <!-- **************************************** -->
+
     <Style Selector="Separator">
         <Setter Property="Margin" Value="25 25 25 25"/>
     </Style>

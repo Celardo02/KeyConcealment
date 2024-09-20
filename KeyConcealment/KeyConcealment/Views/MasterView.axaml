@@ -21,7 +21,7 @@
   <ScrollViewer>
       <StackPanel>
           <Border
-                Classes = "BoxStackPan">
+                Classes = "Box">
             <StackPanel>
               <TextBlock 
                     Classes = "Title"
@@ -42,23 +42,23 @@
           />
 
           <Border 
-                Classes = "BoxStackPan">
+                Classes = "Box">
                 <StackPanel>
 
                       <TextBox
-                            Classes = "Pwd"
+                            Classes = "UserData Pwd"
                             Watermark = "Old Master Password"
                             Text = "{Binding OldPwd}">
                       </TextBox>
 
                       <TextBox
-                            Classes = "Pwd"
+                            Classes = "UserData Pwd"
                             Watermark = "New Master Password"
                             Text = "{Binding NewPwd}">
                       </TextBox>
 
                       <TextBox
-                            Classes = "Pwd"
+                            Classes = "UserData Pwd"
                             Watermark = "Confirm New Master Password"
                             Text = "{Binding ConfNewPwd}">
                       </TextBox>

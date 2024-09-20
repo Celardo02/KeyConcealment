@@ -30,6 +30,39 @@ public partial class CredsViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(AddCredentialsCommand))]
     private string _newPwd;
 
+    #region special character toggle attributes
+    [ObservableProperty]
+    private bool _charMinus;
+
+    [ObservableProperty]
+    private bool _charPlus;
+
+    [ObservableProperty]
+    private bool _charUnderscore;
+
+    [ObservableProperty]
+    private bool _charAmpersand;
+
+    [ObservableProperty]
+    private bool _charAt;
+
+    [ObservableProperty]
+    private bool _charPercent;
+
+    [ObservableProperty]
+    private bool _charDollar;
+
+    [ObservableProperty]
+    private bool _charPound;
+
+    [ObservableProperty]
+    private bool _charHashtag;
+
+    [ObservableProperty]
+    private bool _charEsclamation;
+
+    #endregion
+
     private IService _s;
     #endregion 
 

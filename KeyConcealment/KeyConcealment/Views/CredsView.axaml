@@ -70,36 +70,36 @@
                                                 Classes="Caption">
                                                 Special Characters to include
                                           </TextBlock>
-                                          <CheckBox>
+                                          <ToggleButton IsChecked="{Binding CharMinus}">
                                                 -
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharPlus}">
                                                 +
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharUnderscore}">
                                                 _
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharAmpersand}">
                                                 &amp;
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharAt}">
                                                 @
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharPercent}">
                                                 %
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharDollar}">
                                                 $
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharPound}">
                                                 £
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharHashtag}">
                                                 #
-                                          </CheckBox>
-                                          <CheckBox>
+                                          </ToggleButton>
+                                          <ToggleButton IsChecked="{Binding CharEsclamation}">
                                                 !
-                                          </CheckBox>
+                                          </ToggleButton>
                                     </StackPanel>
                               </StackPanel>
 

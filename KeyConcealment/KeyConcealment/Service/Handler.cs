@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeyConcealment.Cryptography;
@@ -128,6 +129,16 @@ public class Handler : IService
                 this.ShowMessage("Error",e.Message, Icon.Error);
             }
              
+    }
+
+    public void AddCredentials(string id, string usr, string mail, string speChars, int pwdLength)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddCredentials(string id, string usr, string mail, string pwd)
+    {
+        throw new NotImplementedException();
     }
 
     #region master password

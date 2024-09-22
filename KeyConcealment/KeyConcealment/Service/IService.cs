@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KeyConcealment.ViewModels;
 using MsBox.Avalonia.Enums;
@@ -35,6 +36,25 @@ public interface IService
     /// everything
     /// </summary>
     void ResetVault();
+
+    /// <summary>
+    /// Adds new credential set inside the vault generating the password
+    /// </summary>
+    /// <param name="id">Credentials id</param>
+    /// <param name="usr">Username</param>
+    /// <param name="mail">E-mail</param>
+    /// <param name="speChars">Special characters to use inside the auto generated password</param>
+    /// <param name="pwdLength">Length of the auto generated password</param>
+    void AddCredentials(string id, string usr, string mail, string speChars, int pwdLength);
+
+    /// <summary>
+    /// Adds new credential set inside the vault 
+    /// </summary>
+    /// <param name="id">Credentials id</param>
+    /// <param name="usr">Username</param>
+    /// <param name="mail">E-mail</param>
+    /// <param name="pwd">Password</param>
+    void AddCredentials(string id, string usr, string mail, string pwd);
 
     #region master password 
     /// <summary>

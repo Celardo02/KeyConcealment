@@ -3,6 +3,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:KeyConcealment.ViewModels"
+      xmlns:models="clr-namespace:KeyConcealment.Domain"
       mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
       x:Class="KeyConcealment.Views.CredsView"
       x:DataType="vm:CredsViewModel">
@@ -47,29 +48,56 @@
                               </StackPanel>
 
                               <CheckBox
-                                    IsChecked="True"
-                                    x:Name="genPwd">
+                                    IsChecked="{Binding GenPwd}"
+                                    x:Name="genPwdButton">
                                     Generate Password
                               </CheckBox>
 
                               <StackPanel
-                                    IsVisible="{Binding ElementName=genPwd, Path=IsChecked}">
+                                    IsVisible="{Binding ElementName=genPwdButton, Path=IsChecked}">
 
-                                    <StackPanel
-                                          Classes="HorizontalStackPan">
-                                          <TextBlock
-                                                Classes="Caption">
-                                                Password Length
-                                          </TextBlock>
-                                          <NumericUpDown Value="20" Minimum="15" FormatString="0" />
-                                    </StackPanel>
 
-                                    <StackPanel
-                                          Classes="HorizontalStackPan">
-                                          <TextBlock
-                                                Classes="Caption">
-                                                Special Characters to include
-                                          </TextBlock>
+                                    <TextBlock
+                                          Classes="Caption">
+                                          Password Length:
+                                    </TextBlock>
+                                    <NumericUpDown Value="{Binding PwdLen}" Minimum="15"
+                                          FormatString="0" />
+
+
+                                    <TextBlock
+                                          Classes="Caption">
+                                          Special Characters to include:
+                                    </TextBlock>
+                                    <ItemsControl ItemsSource="{Binding SpecChars}">
+                                          <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                      <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                          </ItemsControl.ItemsPanel>
+                                          <ItemsControl.ItemTemplate>
+                                                <DataTemplate
+                                                      DataType="{x:Type models:SpecChar}">
+                                                      <ToggleButton
+                                                            IsChecked="{Binding Chosen}"
+                                                            Content="{Binding SpecialCharacter}" />
+                                                </DataTemplate>
+                                          </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                    <!--
+                                          <ListBox
+                                                ItemsSource="{Binding SpecChars}">
+                                                <ListBox.ItemTemplate>
+                                                      <DataTemplate
+                                                            DataType="{x:Type models:SpecChar}">
+                                                            <ToggleButton
+                                                                  IsChecked="{Binding Chosen}">
+                                                                  <TextBlock
+                                                                        Text="{Binding SpecialCharacter}" />
+                                                            </ToggleButton>
+                                                      </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                          </ListBox>
                                           <ToggleButton IsChecked="{Binding CharMinus}">
                                                 -
                                           </ToggleButton>
@@ -99,15 +127,15 @@
                                           </ToggleButton>
                                           <ToggleButton IsChecked="{Binding CharEsclamation}">
                                                 !
-                                          </ToggleButton>
-                                    </StackPanel>
+                                          </ToggleButton>-->
+
                               </StackPanel>
 
                               <TextBox
                                     Classes="UserData Pwd"
                                     Watermark="Password"
                                     Text="{Binding NewPwd}"
-                                    IsVisible="{Binding ElementName=genPwd, Path=!IsChecked}">
+                                    IsVisible="{Binding ElementName=genPwdButton, Path=!IsChecked}">
                               </TextBox>
 
 

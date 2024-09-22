@@ -13,11 +13,6 @@
         
     </Style>
 
-
-    <Style Selector="StackPanel.HorizontalStackPan">
-        <Setter Property="Orientation" Value="Horizontal"/>
-    </Style>
-
     <Style Selector = "StackPanel">
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Spacing" Value="10"/>

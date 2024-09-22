@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -30,38 +31,15 @@ public partial class CredsViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(AddCredentialsCommand))]
     private string _newPwd;
 
-    #region special character toggle attributes
     [ObservableProperty]
-    private bool _charMinus;
+    [NotifyCanExecuteChangedFor(nameof(AddCredentialsCommand))]
+    private bool _genPwd;
 
     [ObservableProperty]
-    private bool _charPlus;
+    private decimal _pwdLen;
 
     [ObservableProperty]
-    private bool _charUnderscore;
-
-    [ObservableProperty]
-    private bool _charAmpersand;
-
-    [ObservableProperty]
-    private bool _charAt;
-
-    [ObservableProperty]
-    private bool _charPercent;
-
-    [ObservableProperty]
-    private bool _charDollar;
-
-    [ObservableProperty]
-    private bool _charPound;
-
-    [ObservableProperty]
-    private bool _charHashtag;
-
-    [ObservableProperty]
-    private bool _charEsclamation;
-
-    #endregion
+    private ObservableCollection<SpecChar> _specChars;
 
     private IService _s;
     #endregion 
@@ -70,37 +48,53 @@ public partial class CredsViewModel : ViewModelBase
     public CredsViewModel()
     {
         this._s = Handler.Instance;
-        this.Creds = new ObservableCollection<ICred<string>>();
         this.Init();
     }
 
     public CredsViewModel(IService s)
     {
         this._s = s;
-        this.Creds = new ObservableCollection<ICred<string>>();
         this.Init();
     }
 
     private void Init()
     {
-        
 
-        // TESTING ONLY. REMOVE THIS ENTIRE METHOD
-        Creds.Add(new Credentials("test1","pwd1","","","","mail1","usr1"));
-        Creds.Add(new Credentials("test2","pwd2","","","","mail2","usr2"));
-        Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
-        Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
-        Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
-        Creds.Add(new Credentials("test1","pwd1","","","","mail1","usr1"));
-        Creds.Add(new Credentials("test2","pwd2","","","","mail2","usr2"));
-        Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
-        Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
-        Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
-        Creds.Add(new Credentials("test1","pwd1","","","","mail1","usr1"));
-        Creds.Add(new Credentials("test2","pwd2","","","","mail2","usr2"));
-        Creds.Add(new Credentials("test3","pwd3","","","","mail3","usr3"));
-        Creds.Add(new Credentials("test4","pwd4","","","","mail4","usr4"));
-        Creds.Add(new Credentials("test5","pwd5","","","","mail5","usr5"));
+        this.Creds = new ObservableCollection<ICred<string>>();
+        this.GenPwd = true;
+        this.PwdLen = 20;
+        this.SpecChars = new ObservableCollection<SpecChar>(
+            [
+                new SpecChar('-',false),
+                new SpecChar('+',false),
+                new SpecChar('_',false),
+                new SpecChar('&',false),
+                new SpecChar('%',false),
+                new SpecChar('@',false),
+                new SpecChar('$',false),
+                new SpecChar('£',false),
+                new SpecChar('!',false),
+                new SpecChar('#',false)
+            ]
+        );
+
+
+        // TESTING ONLY. REMOVE FOLLOWING LINES
+        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
+        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
+        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
+        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
+        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
+        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
+        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
+        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
+        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
+        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
+        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
+        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
+        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
+        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
+        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
         // **************************
 
     }
@@ -111,12 +105,31 @@ public partial class CredsViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(this.CheckNewCredsData))]
     private void AddCredentials()
     {
-        throw new NotImplementedException();
+        // special characters
+        string scs = "";
+
+        // adding credentials generating a password
+        if (this.GenPwd)
+        {
+            foreach(SpecChar sc in this.SpecChars)
+                if(sc.Chosen)
+                    scs += sc.SpecialCharacter;
+
+            this._s.AddCredentials(this.NewId, this.NewUsr, this.NewMail, scs, Convert.ToInt32(this.PwdLen));
+
+        }
+        else // adding credentials using user typed password
+            this._s.AddCredentials(this.NewId, this.NewUsr, this.NewMail, this.NewPwd);
     }
 
     [RelayCommand]
     private void PasswordCopy(ICred<string> c)
     {
+        //if (Avalonia.Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        //{
+        //   starTaskWindow.ShowDialog(desktop.MainWindow);
+        //}
+
         throw new NotImplementedException();
     }
 
@@ -134,7 +147,7 @@ public partial class CredsViewModel : ViewModelBase
         */
         throw new NotImplementedException();
     }
-    
+
     #endregion
 
     /// <summary>
@@ -145,7 +158,7 @@ public partial class CredsViewModel : ViewModelBase
     /// </returns>
     private bool CheckNewCredsData()
     {
-        return !string.IsNullOrEmpty(this.NewId) && !string.IsNullOrEmpty(this.NewUsr) && !string.IsNullOrEmpty(this.NewMail) && !string.IsNullOrEmpty(this.NewPwd);
+        return !string.IsNullOrEmpty(this.NewId) && !string.IsNullOrEmpty(this.NewUsr) && !string.IsNullOrEmpty(this.NewMail) && (this.GenPwd || !string.IsNullOrEmpty(this.NewPwd));
     }
 
 }

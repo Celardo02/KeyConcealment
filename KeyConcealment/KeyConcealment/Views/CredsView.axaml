@@ -49,12 +49,12 @@
 
                               <CheckBox
                                     IsChecked="{Binding GenPwd}"
-                                    x:Name="genPwdButton">
+                                    x:Name="genPwdCheck">
                                     Generate Password
                               </CheckBox>
 
                               <StackPanel
-                                    IsVisible="{Binding ElementName=genPwdButton, Path=IsChecked}">
+                                    IsVisible="{Binding ElementName=genPwdCheck, Path=IsChecked}">
 
 
                                     <TextBlock
@@ -84,50 +84,6 @@
                                                 </DataTemplate>
                                           </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                    <!--
-                                          <ListBox
-                                                ItemsSource="{Binding SpecChars}">
-                                                <ListBox.ItemTemplate>
-                                                      <DataTemplate
-                                                            DataType="{x:Type models:SpecChar}">
-                                                            <ToggleButton
-                                                                  IsChecked="{Binding Chosen}">
-                                                                  <TextBlock
-                                                                        Text="{Binding SpecialCharacter}" />
-                                                            </ToggleButton>
-                                                      </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                          </ListBox>
-                                          <ToggleButton IsChecked="{Binding CharMinus}">
-                                                -
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharPlus}">
-                                                +
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharUnderscore}">
-                                                _
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharAmpersand}">
-                                                &amp;
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharAt}">
-                                                @
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharPercent}">
-                                                %
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharDollar}">
-                                                $
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharPound}">
-                                                £
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharHashtag}">
-                                                #
-                                          </ToggleButton>
-                                          <ToggleButton IsChecked="{Binding CharEsclamation}">
-                                                !
-                                          </ToggleButton>-->
 
                               </StackPanel>
 
@@ -135,7 +91,7 @@
                                     Classes="UserData Pwd"
                                     Watermark="Password"
                                     Text="{Binding NewPwd}"
-                                    IsVisible="{Binding ElementName=genPwdButton, Path=!IsChecked}">
+                                    IsVisible="{Binding ElementName=genPwdCheck, Path=!IsChecked}">
                               </TextBox>
 
 

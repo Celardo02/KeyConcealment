@@ -40,21 +40,23 @@ public interface IService
     /// <summary>
     /// Adds new credential set inside the vault generating the password
     /// </summary>
+    /// <param name="masterPwd">master password</param>
     /// <param name="id">Credentials id</param>
     /// <param name="usr">Username</param>
     /// <param name="mail">E-mail</param>
     /// <param name="speChars">Special characters to use inside the auto generated password</param>
     /// <param name="pwdLength">Length of the auto generated password</param>
-    void AddCredentials(string id, string usr, string mail, string speChars, int pwdLength);
+    void AddCredentials(string masterPwd, string id, string usr, string mail, string speChars, int pwdLength);
 
     /// <summary>
     /// Adds new credential set inside the vault 
     /// </summary>
+    /// <param name="masterPwd">master password</param>
     /// <param name="id">Credentials id</param>
     /// <param name="usr">Username</param>
     /// <param name="mail">E-mail</param>
     /// <param name="pwd">Password</param>
-    void AddCredentials(string id, string usr, string mail, string pwd);
+    void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd);
 
     #region master password 
     /// <summary>

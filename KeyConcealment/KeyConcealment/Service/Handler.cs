@@ -131,12 +131,12 @@ public class Handler : IService
              
     }
 
-    public void AddCredentials(string id, string usr, string mail, string speChars, int pwdLength)
+    public void AddCredentials(string masterPwd, string id, string usr, string mail, string speChars, int pwdLength)
     {
         throw new NotImplementedException();
     }
 
-    public void AddCredentials(string id, string usr, string mail, string pwd)
+    public void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd)
     {
         throw new NotImplementedException();
     }

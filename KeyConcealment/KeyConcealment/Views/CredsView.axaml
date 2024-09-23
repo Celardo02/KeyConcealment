@@ -61,7 +61,7 @@
                                           Classes="Caption">
                                           Password Length:
                                     </TextBlock>
-                                    <NumericUpDown Value="{Binding PwdLen}" Minimum="15"
+                                    <NumericUpDown Value="{Binding PwdLen}" Minimum="{Binding MinPwdLen}"
                                           FormatString="0" />
 
 

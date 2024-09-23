@@ -31,17 +31,26 @@ public partial class CredsViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(AddCredentialsCommand))]
     private string _newPwd;
 
+    // flag that allow the user to auto generate a new password for a credential set
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AddCredentialsCommand))]
     private bool _genPwd;
 
+    // length of the auto generate password
     [ObservableProperty]
     private decimal _pwdLen;
 
+    // special characters to be used in the auto generated password
     [ObservableProperty]
     private ObservableCollection<SpecChar> _specChars;
 
+    // minimum auto generated password length
+    [ObservableProperty]
+    private int _minPwdLen = 15;
+
     private IService _s;
+
+    
     #endregion 
 
     #region constructors
@@ -143,7 +152,7 @@ public partial class CredsViewModel : ViewModelBase
     private void SaveChanges(ICred<string> c)
     {
         /* REMINDER:
-        *  this methd needs to check is current c has any changes before saving new values
+        *  this methd needs to check if current c has any changes before saving new values
         */
         throw new NotImplementedException();
     }

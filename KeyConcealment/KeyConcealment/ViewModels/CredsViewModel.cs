@@ -1,10 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyConcealment.Domain;
 using KeyConcealment.Service;
+using MsBox.Avalonia.Enums;
 
 namespace KeyConcealment.ViewModels;
 
@@ -48,10 +49,23 @@ public partial class CredsViewModel : ViewModelBase
     [ObservableProperty]
     private int _minPwdLen = 15;
 
+    [ObservableProperty]
+    private bool _isPopupVisible;
+
+    // master password value typed by the user
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    private string _typedPwd;
+
+    // action selected by the user with buttons on each credential set row
+    private Action? _selectedAction;
+    // selected credential set
+    private ICred<string>? _slectedCred;
+
     private IService _s;
 
-    
-    #endregion 
+
+    #endregion
 
     #region constructors
     public CredsViewModel()
@@ -86,6 +100,9 @@ public partial class CredsViewModel : ViewModelBase
                 new SpecChar('#',false)
             ]
         );
+        this.IsPopupVisible = false;
+        this.TypedPwd = "";
+        this._selectedAction = null;
 
 
         // TESTING ONLY. REMOVE FOLLOWING LINES
@@ -114,47 +131,89 @@ public partial class CredsViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(this.CheckNewCredsData))]
     private void AddCredentials()
     {
-        // special characters
-        string scs = "";
-
-        // adding credentials generating a password
-        if (this.GenPwd)
-        {
-            foreach(SpecChar sc in this.SpecChars)
-                if(sc.Chosen)
-                    scs += sc.SpecialCharacter;
-
-            this._s.AddCredentials(this.NewId, this.NewUsr, this.NewMail, scs, Convert.ToInt32(this.PwdLen));
-
-        }
-        else // adding credentials using user typed password
-            this._s.AddCredentials(this.NewId, this.NewUsr, this.NewMail, this.NewPwd);
+        this._selectedAction = Action.ADD_CRED;
+        this.IsPopupVisible = true;
     }
 
     [RelayCommand]
     private void PasswordCopy(ICred<string> c)
     {
-        //if (Avalonia.Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        //{
-        //   starTaskWindow.ShowDialog(desktop.MainWindow);
-        //}
-
-        throw new NotImplementedException();
+        this._slectedCred = c;
+        this._selectedAction = Action.PWD_COPY;
+        this.IsPopupVisible = true;
     }
 
     [RelayCommand]
     private void PasswordInfo(ICred<string> c)
     {
-        throw new NotImplementedException();
+        this._slectedCred = c;
+        this._selectedAction = Action.PWD_INFO;
+        this.IsPopupVisible = true;
     }
 
     [RelayCommand]
     private void SaveChanges(ICred<string> c)
     {
-        /* REMINDER:
-        *  this methd needs to check if current c has any changes before saving new values
-        */
-        throw new NotImplementedException();
+        this._slectedCred = c;
+        this._selectedAction = Action.SAVE_CAHNGES;
+        this.IsPopupVisible = true;
+    }
+
+    [RelayCommand(CanExecute = nameof(CheckTypedPwd))]
+    private void Submit()
+    {
+        switch (this._selectedAction)
+        {
+            case Action.ADD_CRED:
+                // special characters
+                string scs = "";
+
+                // adding a credential set with auto generated password
+                if (this.GenPwd)
+                {
+                    foreach (SpecChar sc in this.SpecChars)
+                        if (sc.Chosen)
+                            scs += sc.SpecialCharacter;
+
+                    this._s.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, scs, Convert.ToInt32(this.PwdLen));
+
+                }
+                else // adding a credential set using user typed password
+                    this._s.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, this.NewPwd);
+                    
+                break;
+            
+            case Action.PWD_COPY:
+                throw new NotImplementedException();
+                break;
+
+            case Action.SAVE_CAHNGES:
+                /* REMINDER:
+                *  this methd needs to check if current c has any changes before saving new values
+                */
+                throw new NotImplementedException();
+                break;
+
+            case Action.PWD_INFO:
+                throw new NotImplementedException();
+                break;
+
+            default:
+                this._s.ShowMessage("Error", "Requested action does not exist.", Icon.Error, ButtonEnum.Ok);
+                break;
+        }
+
+        this.Cancel();
+    }
+
+    [RelayCommand]
+    private void Cancel()
+    {
+        // resetting all attributes involved in user required actions
+        this.IsPopupVisible = false;
+        this.TypedPwd = "";
+        this._selectedAction = null;
+        this._slectedCred = null;
     }
 
     #endregion
@@ -170,4 +229,26 @@ public partial class CredsViewModel : ViewModelBase
         return !string.IsNullOrEmpty(this.NewId) && !string.IsNullOrEmpty(this.NewUsr) && !string.IsNullOrEmpty(this.NewMail) && (this.GenPwd || !string.IsNullOrEmpty(this.NewPwd));
     }
 
+    private bool CheckTypedPwd()
+    {
+        return !string.IsNullOrEmpty(this.TypedPwd);
+    }
+
+}
+
+/// <summary>
+/// Enum class that represents which action the user desire between:
+/// <list type="bullet">
+/// <item><description>Add new credential set</description></item>
+/// <item><description>Copy the password of that row</description></item>
+/// <item><description>Show every info of the credential set in that row</description></item>
+/// <item><description>Save changes on the credential set of that row</description></item>
+/// </list>
+/// </summary>
+public enum Action
+{
+    ADD_CRED,
+    PWD_COPY,
+    PWD_INFO,
+    SAVE_CAHNGES
 }

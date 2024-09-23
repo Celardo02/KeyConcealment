@@ -21,5 +21,33 @@
     <Style Selector = "TextBlock.Caption">
         <Setter Property="Margin" Value="0 5"/>
     </Style>
+
+    <!-- Pop up dialog style (master password input) -->
+
+    <Style Selector="Border.PopUpDialog">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="ZIndex" Value="11"/>
+    </Style>
+
+    <Style Selector="Border.PopUpDialog TextBlock">
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+
+    <Style Selector="Border.PopUpDialog StackPanel.ButtonStack">
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+
+    <Style Selector="Border.PopUpDialog Button">
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <!-- ******************************************* -->
+
     
 </Styles>

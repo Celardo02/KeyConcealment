@@ -22,147 +22,175 @@
       </UserControl.Styles>
 
       <ScrollViewer>
-            <StackPanel>
-                  <ToggleButton x:Name="toggleButton" Content="Open/Close Add Credentials Section" />
-                  <Border
-                        Classes="Box"
-                        IsVisible="{Binding ElementName=toggleButton, Path=IsChecked}">
-                        <StackPanel>
-
+            <Grid>
+                  <StackPanel>
+                        <ToggleButton x:Name="toggleButton"
+                              Content="Open/Close Add Credentials Section" />
+                        <Border
+                              Classes="Box"
+                              IsVisible="{Binding ElementName=toggleButton, Path=IsChecked}">
                               <StackPanel>
+
+                                    <StackPanel>
+                                          <TextBox
+                                                Classes="UserData"
+                                                Watermark="Id"
+                                                Text="{Binding NewId}">
+                                          </TextBox>
+                                          <TextBox
+                                                Classes="UserData"
+                                                Watermark="Username"
+                                                Text="{Binding NewUsr}">
+                                          </TextBox>
+                                          <TextBox
+                                                Classes="UserData"
+                                                Watermark="E-mail"
+                                                Text="{Binding NewMail}">
+                                          </TextBox>
+                                    </StackPanel>
+
+                                    <CheckBox
+                                          IsChecked="{Binding GenPwd}"
+                                          x:Name="genPwdCheck">
+                                          Generate Password
+                                    </CheckBox>
+
+                                    <StackPanel
+                                          IsVisible="{Binding ElementName=genPwdCheck, Path=IsChecked}">
+
+
+                                          <TextBlock
+                                                Classes="Caption">
+                                                Password Length:
+                                          </TextBlock>
+                                          <NumericUpDown Value="{Binding PwdLen}"
+                                                Minimum="{Binding MinPwdLen}"
+                                                FormatString="0" />
+
+
+                                          <TextBlock
+                                                Classes="Caption">
+                                                Special Characters to include:
+                                          </TextBlock>
+                                          <ItemsControl ItemsSource="{Binding SpecChars}">
+                                                <ItemsControl.ItemsPanel>
+                                                      <ItemsPanelTemplate>
+                                                            <StackPanel
+                                                                  Orientation="Horizontal" />
+                                                      </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                      <DataTemplate
+                                                            DataType="{x:Type models:SpecChar}">
+                                                            <ToggleButton
+                                                                  IsChecked="{Binding Chosen}"
+                                                                  Content="{Binding SpecialCharacter}" />
+                                                      </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                          </ItemsControl>
+
+                                    </StackPanel>
+
                                     <TextBox
-                                          Classes="UserData"
-                                          Watermark="Id"
-                                          Text="{Binding NewId}">
+                                          Classes="UserData Pwd"
+                                          Watermark="Password"
+                                          Text="{Binding NewPwd}"
+                                          IsVisible="{Binding ElementName=genPwdCheck, Path=!IsChecked}">
                                     </TextBox>
-                                    <TextBox
-                                          Classes="UserData"
-                                          Watermark="Username"
-                                          Text="{Binding NewUsr}">
-                                    </TextBox>
-                                    <TextBox
-                                          Classes="UserData"
-                                          Watermark="E-mail"
-                                          Text="{Binding NewMail}">
-                                    </TextBox>
+
+
+                                    <Button
+                                          Classes="ConfirmButton"
+                                          Content="Add Credentials"
+                                          Command="{Binding AddCredentialsCommand}"
+                                    />
                               </StackPanel>
+                        </Border>
 
-                              <CheckBox
-                                    IsChecked="{Binding GenPwd}"
-                                    x:Name="genPwdCheck">
-                                    Generate Password
-                              </CheckBox>
+                        <Border
+                              Classes="Box">
+                              <Grid>
+                                    <DataGrid
+                                          ItemsSource="{Binding Creds}">
 
-                              <StackPanel
-                                    IsVisible="{Binding ElementName=genPwdCheck, Path=IsChecked}">
+                                          <DataGrid.Columns>
+                                                <DataGridTextColumn
+                                                      Header="Id"
+                                                      Binding="{Binding Id}"
+                                                      Width="*" />
+                                                <DataGridTextColumn
+                                                      Header="Username"
+                                                      Binding="{Binding Usr}"
+                                                      Width="*" />
+                                                <DataGridTextColumn
+                                                      Header="E-mail"
+                                                      Binding="{Binding Mail}"
+                                                      Width="1.5*" />
+                                                <DataGridTemplateColumn
+                                                      Header="Copy Password"
+                                                      Width="*">
+                                                      <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                  <Button
+                                                                        Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordCopyCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="Copy" />
+                                                            </DataTemplate>
+                                                      </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTemplateColumn
+                                                      Header="Password Info"
+                                                      Width="*">
+                                                      <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                  <Button
+                                                                        Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordInfoCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="Info" />
+                                                            </DataTemplate>
+                                                      </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTemplateColumn
+                                                      Header="Save Changes"
+                                                      Width="*">
+                                                      <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                  <Button
+                                                                        Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).SaveChangesCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="Save" />
+                                                            </DataTemplate>
+                                                      </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                          </DataGrid.Columns>
 
+                                    </DataGrid>
+                              </Grid>
+                        </Border>
+                  </StackPanel>
 
-                                    <TextBlock
-                                          Classes="Caption">
-                                          Password Length:
-                                    </TextBlock>
-                                    <NumericUpDown Value="{Binding PwdLen}" Minimum="{Binding MinPwdLen}"
-                                          FormatString="0" />
+                  <!-- popup dialog container -->
+                  <Border
+                        Classes="PopUpDialog Box"
+                        IsVisible="{Binding IsPopupVisible}">
+                        <StackPanel>
+                              <TextBlock Text="Enter your password" />
 
-
-                                    <TextBlock
-                                          Classes="Caption">
-                                          Special Characters to include:
-                                    </TextBlock>
-                                    <ItemsControl ItemsSource="{Binding SpecChars}">
-                                          <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                      <StackPanel Orientation="Horizontal" />
-                                                </ItemsPanelTemplate>
-                                          </ItemsControl.ItemsPanel>
-                                          <ItemsControl.ItemTemplate>
-                                                <DataTemplate
-                                                      DataType="{x:Type models:SpecChar}">
-                                                      <ToggleButton
-                                                            IsChecked="{Binding Chosen}"
-                                                            Content="{Binding SpecialCharacter}" />
-                                                </DataTemplate>
-                                          </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-
-                              </StackPanel>
-
+                              <!-- Password TextBox -->
                               <TextBox
                                     Classes="UserData Pwd"
-                                    Watermark="Password"
-                                    Text="{Binding NewPwd}"
-                                    IsVisible="{Binding ElementName=genPwdCheck, Path=!IsChecked}">
-                              </TextBox>
+                                    Text="{Binding TypedPwd}" />
 
+                              <StackPanel
+                                    Classes="ButtonStack">
+                                    <!-- OK Button -->
+                                    <Button Content="OK" Command="{Binding SubmitCommand}" />
 
-                              <Button
-                                    Classes="ConfirmButton"
-                                    Content="Add Credentials"
-                                    Command="{Binding AddCredentialsCommand}"
-                              />
+                                    <!-- Cancel Button -->
+                                    <Button Content="Cancel" Command="{Binding CancelCommand}" />
+                              </StackPanel>
                         </StackPanel>
                   </Border>
-
-                  <Border
-                        Classes="Box">
-                        <Grid>
-                              <DataGrid
-                                    ItemsSource="{Binding Creds}">
-
-                                    <DataGrid.Columns>
-                                          <DataGridTextColumn
-                                                Header="Id"
-                                                Binding="{Binding Id}"
-                                                Width="*" />
-                                          <DataGridTextColumn
-                                                Header="Username"
-                                                Binding="{Binding Usr}"
-                                                Width="*" />
-                                          <DataGridTextColumn
-                                                Header="E-mail"
-                                                Binding="{Binding Mail}"
-                                                Width="1.5*" />
-                                          <DataGridTemplateColumn
-                                                Header="Copy Password"
-                                                Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                      <DataTemplate>
-                                                            <Button
-                                                                  Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordCopyCommand}"
-                                                                  CommandParameter="{Binding}"
-                                                                  Content="Copy" />
-                                                      </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                          </DataGridTemplateColumn>
-                                          <DataGridTemplateColumn
-                                                Header="Password Info"
-                                                Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                      <DataTemplate>
-                                                            <Button
-                                                                  Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).PasswordInfoCommand}"
-                                                                  CommandParameter="{Binding}"
-                                                                  Content="Info" />
-                                                      </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                          </DataGridTemplateColumn>
-                                          <DataGridTemplateColumn
-                                                Header="Save Changes"
-                                                Width="*">
-                                                <DataGridTemplateColumn.CellTemplate>
-                                                      <DataTemplate>
-                                                            <Button
-                                                                  Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).SaveChangesCommand}"
-                                                                  CommandParameter="{Binding}"
-                                                                  Content="Save" />
-                                                      </DataTemplate>
-                                                </DataGridTemplateColumn.CellTemplate>
-                                          </DataGridTemplateColumn>
-                                    </DataGrid.Columns>
-
-                              </DataGrid>
-                        </Grid>
-                  </Border>
-            </StackPanel>
+            </Grid>
       </ScrollViewer>
 </UserControl>

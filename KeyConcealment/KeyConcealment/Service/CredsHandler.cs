@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 using KeyConcealment.Pers;
@@ -38,6 +39,12 @@ public class CredsHandler : ICredsManager
     }
 
     #endregion
+
+    #region ICredsManager methods
+    public List<ICred<string>> GetAllCredentials()
+    {
+        return this._persCreds.ListAll();
+    }
 
     public void AddCredentials(string masterPwd, string id, string usr, string mail, string speChars, int pwdLength)
     {
@@ -83,5 +90,6 @@ public class CredsHandler : ICredsManager
         */
         throw new NotImplementedException();
     }
+    #endregion
 
 }

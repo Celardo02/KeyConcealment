@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using KeyConcealment.Domain;
 
 namespace KeyConcealment.Service;
@@ -7,6 +8,16 @@ namespace KeyConcealment.Service;
 /// </summary>
 public interface ICredsManager
 {
+    /// <summary>
+    /// Gets all credential sets inside the vault
+    /// </summary>
+    /// <returns>
+    /// Returns a <c>List<ICred<string></c> object that contains all credential sets 
+    /// stored inside the vault
+    /// </returns>
+    List<ICred<string>> GetAllCredentials();
+
+
     /// <summary>
     /// Adds new credential set inside the vault generating the password
     /// </summary>

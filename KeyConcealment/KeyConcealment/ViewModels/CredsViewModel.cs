@@ -151,10 +151,18 @@ public partial class CredsViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void RegeneratePwd(ICred<string> c)
+    {
+        this._slectedCred = c;
+        this._selectedAction = Action.PWD_REGEN;
+        this.IsPopupVisible = true;
+    }
+
+    [RelayCommand]
     private void SaveChanges(ICred<string> c)
     {
         this._slectedCred = c;
-        this._selectedAction = Action.SAVE_CAHNGES;
+        this._selectedAction = Action.SAVE_CHANGES;
         this.IsPopupVisible = true;
     }
 
@@ -183,18 +191,19 @@ public partial class CredsViewModel : ViewModelBase
                 break;
             
             case Action.PWD_COPY:
-                throw new NotImplementedException();
-                break;
-
-            case Action.SAVE_CAHNGES:
-                /* REMINDER:
-                *  this methd needs to check if current c has any changes before saving new values
-                */
-                throw new NotImplementedException();
+                this._cm.PasswordCopy(this.TypedPwd, this._slectedCred.Id);
                 break;
 
             case Action.PWD_INFO:
-                throw new NotImplementedException();
+                this._cm.PasswordInfo(this.TypedPwd, this._slectedCred.Id);
+                break;
+
+            case Action.PWD_REGEN:
+                this._cm.RegeneratePassword(this.TypedPwd, this._slectedCred.Id);
+                break;
+
+            case Action.SAVE_CHANGES:
+                this._cm.SaveChanges(this.TypedPwd,this._slectedCred);                
                 break;
 
             default:
@@ -249,5 +258,6 @@ public enum Action
     ADD_CRED,
     PWD_COPY,
     PWD_INFO,
-    SAVE_CAHNGES
+    PWD_REGEN,
+    SAVE_CHANGES
 }

@@ -127,7 +127,7 @@
                                                       Binding="{Binding Mail}"
                                                       Width="1.5*" />
                                                 <DataGridTemplateColumn
-                                                      Header="Copy Password"
+                                                      Header="Copy pwd"
                                                       Width="*">
                                                       <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
@@ -139,7 +139,7 @@
                                                       </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
                                                 <DataGridTemplateColumn
-                                                      Header="Password Info"
+                                                      Header="Pwd Info"
                                                       Width="*">
                                                       <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
@@ -151,8 +151,20 @@
                                                       </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
                                                 <DataGridTemplateColumn
-                                                      Header="Save Changes"
+                                                      Header="Renew pwd"
                                                       Width="*">
+                                                      <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                  <Button
+                                                                        Command="{Binding $parent[UserControl].((vm:CredsViewModel)DataContext).RegeneratePwdCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="Renew" />
+                                                            </DataTemplate>
+                                                      </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTemplateColumn
+                                                      Header="Save Changes"
+                                                      Width="1.2*">
                                                       <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
                                                                   <Button

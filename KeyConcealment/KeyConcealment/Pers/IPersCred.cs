@@ -73,9 +73,6 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// Lists all the objects inside the persistence class
     /// </summary>
     /// <returns>Returns a <c>List</c> with all the object inside the presistence class</returns>
-    /// <exception cref="PersExc">
-    /// Throws a <c>PersExc</c> exception if the persistence is empty
-    /// </exception>
     List<V> ListAll();
 
     /// <summary>

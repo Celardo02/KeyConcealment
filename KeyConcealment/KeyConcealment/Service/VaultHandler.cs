@@ -25,7 +25,7 @@ public class VaultHandler : IVaultManager
         this._crypto = Crypto.Instance;
     }
 
-    public VaultHandler Instance 
+    public static VaultHandler Instance 
     {
         get 
         {

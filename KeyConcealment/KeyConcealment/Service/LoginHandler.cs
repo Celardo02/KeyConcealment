@@ -28,7 +28,7 @@ public class LoginHandler : ILoginManager
         this._crypto = Crypto.Instance;
     }
 
-    public LoginHandler Instance 
+    public static LoginHandler Instance 
     {
         get 
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -81,8 +82,6 @@ public partial class CredsViewModel : ViewModelBase
 
     private void Init()
     {
-
-        this.Creds = new ObservableCollection<ICred<string>>();
         this.GenPwd = true;
         this.PwdLen = 20;
         this.SpecChars = new ObservableCollection<SpecChar>(
@@ -102,25 +101,11 @@ public partial class CredsViewModel : ViewModelBase
         this.IsPopupVisible = false;
         this.TypedPwd = "";
         this._selectedAction = null;
+        this.Creds = new ObservableCollection<ICred<string>>();
+        List<ICred<string>> credsListAll = this._cm.GetAllCredentials();
 
-
-        // TESTING ONLY. REMOVE FOLLOWING LINES
-        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
-        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
-        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
-        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
-        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
-        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
-        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
-        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
-        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
-        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
-        Creds.Add(new Credentials("test1", "pwd1", "", "", "", "mail1", "usr1"));
-        Creds.Add(new Credentials("test2", "pwd2", "", "", "", "mail2", "usr2"));
-        Creds.Add(new Credentials("test3", "pwd3", "", "", "", "mail3", "usr3"));
-        Creds.Add(new Credentials("test4", "pwd4", "", "", "", "mail4", "usr4"));
-        Creds.Add(new Credentials("test5", "pwd5", "", "", "", "mail5", "usr5"));
-        // **************************
+        foreach(ICred<string> c in credsListAll)
+            this.Creds.Add(c);
 
     }
     #endregion

@@ -26,4 +26,11 @@ public interface ICredsManager
     /// <param name="pwd">Password</param>
     void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd);
 
+    /// <summary>
+    /// Regenerates the password of a credential set
+    /// </summary>
+    /// <param name="masterPwd">master password of the vault</param>
+    /// <param name="id">id of the credential set</param>
+    void RegeneratePassword(string masterPwd, string id);
+
 }

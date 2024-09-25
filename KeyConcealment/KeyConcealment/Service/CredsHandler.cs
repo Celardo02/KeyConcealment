@@ -49,4 +49,9 @@ public class CredsHandler : ICredsManager
         throw new NotImplementedException();
     }
 
+    public void RegeneratePassword(string masterPwd, string id)
+    {
+        throw new NotImplementedException();
+    }
+
 }

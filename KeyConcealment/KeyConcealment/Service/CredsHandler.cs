@@ -49,8 +49,38 @@ public class CredsHandler : ICredsManager
         throw new NotImplementedException();
     }
 
+    public void PasswordCopy(string masterPwd, string id)
+    {
+        /*
+        public static void CleanClipboard(string pattern)
+        {
+            string clipboardText = Clipboard.GetText();
+
+            // Remove the pattern from the clipboard text
+            string cleanedText = clipboardText.Replace(pattern, "");
+
+            // Set the cleaned text back to the clipboard
+            Clipboard.SetText(cleanedText);
+        }
+        */
+        throw new NotImplementedException();
+    }
+
+    public void PasswordInfo(string masterPwd, string id)
+    {
+        throw new NotImplementedException();
+    }
+
     public void RegeneratePassword(string masterPwd, string id)
     {
+        throw new NotImplementedException();
+    }
+
+    public void SaveChanges(string masterPwd, ICred<string> c)
+    {
+        /* REMINDER:
+        *  this methd needs to check if current c has any changes before saving new values
+        */
         throw new NotImplementedException();
     }
 

@@ -1,4 +1,3 @@
-using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyConcealment.Service;
@@ -25,20 +24,20 @@ public partial class MasterViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(ChangePwdCommand))]
     private string? _oldPwd;
 
-    private IService _s;
+    private IVaultManager _vm;
     #endregion 
 
     #region Constructors
     public MasterViewModel()
     {
-        this._s = Handler.Instance;
-        this._exp = this._s.GetMasterPwdExp();
+        this._vm = VaultHandler.Instance;
+        this._exp = this._vm.GetMasterPwdExp();
     }
 
-    public MasterViewModel(IService s)
+    public MasterViewModel(IVaultManager vm)
     {
-        this._s = s;
-        this._exp = this._s.GetMasterPwdExp();
+        this._vm = vm;
+        this._exp = this._vm.GetMasterPwdExp();
     }
     #endregion 
 
@@ -47,11 +46,11 @@ public partial class MasterViewModel : ViewModelBase
     {
         if(this.NewPwd.Equals(this.ConfNewPwd))
         {
-            this._s.SetMasterPwd(this.OldPwd,this.NewPwd);
-            this.Exp = this._s.GetMasterPwdExp(); 
+            this._vm.SetMasterPwd(this.OldPwd,this.NewPwd);
+            this.Exp = this._vm.GetMasterPwdExp(); 
         }
         else 
-            this._s.ShowMessage("Error","New master password and confirmation password do not match.", Icon.Error, ButtonEnum.Ok);
+            PopUpMessageHandler.ShowMessage("Error","New master password and confirmation password do not match.", Icon.Error, ButtonEnum.Ok);
 
         this.OldPwd = "";
         this.NewPwd = "";

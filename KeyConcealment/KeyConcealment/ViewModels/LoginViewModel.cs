@@ -1,4 +1,3 @@
-using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyConcealment.Service;
@@ -16,18 +15,21 @@ public partial class LoginViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(CreateVaultCommand))]
     private string? _newPwd;
 
-    private IService _s;
+    private ILoginManager _lm;
+    private IVaultManager _vm;
     #endregion
 
     #region constructors
     public LoginViewModel()
     {
-        this._s = Handler.Instance;
+        this._lm = LoginHandler.Instance;
+        this._vm = VaultHandler.Instance;
     }
 
-    public LoginViewModel(IService s)
+    public LoginViewModel(LoginHandler lm, VaultHandler vm)
     {
-        this._s = s;
+        this._lm = lm;
+        this._vm = vm;
     }
     #endregion 
 
@@ -35,21 +37,21 @@ public partial class LoginViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(this.IsPasswordInserted))]
     private void Login()
     {
-        this._s.Login(InsPwd);
+        this._lm.Login(InsPwd);
         this.InsPwd = "";
     }
 
     [RelayCommand(CanExecute = nameof(this.IsNewPasswordInserted))]
     private void CreateVault()
     {
-        this._s.CreateVault(this.NewPwd);
+        this._vm.CreateVault(this.NewPwd);
         this.NewPwd = "";
     }
 
     [RelayCommand]
     private void ResetVault()
     {
-        this._s.ResetVault();
+        this._vm.ResetVault();
     }
     #endregion
 

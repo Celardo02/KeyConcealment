@@ -35,27 +35,27 @@ public partial class MainViewModel : ViewModelBase
     [NotifyCanExecuteChangedFor(nameof(this.LogoutCommand))]
     private bool _isUserLoggedIn;
 
-    private readonly IService _s;
+    private readonly ILoginManager _lm;
 
     #endregion
 
     #region Constructors
 
-    public MainViewModel(IService s)
+    public MainViewModel(ILoginManager lm)
     {
-        this._s = s;
+        this._lm = lm;
         this.Init();
     }
 
     public MainViewModel()
     {
-        this._s = Handler.Instance;
+        this._lm = LoginHandler.Instance;
         this.Init();
     }
 
     private void Init()
     {
-        this._s.Mvm = this;
+        this._lm.Mvm = this;
 
         this._loginTemplate = new ObservableCollection<TemplateMenuObj>(
             [
@@ -90,7 +90,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(this.IsUserLoggedIn))]
     private void Logout()
     {
-        this._s.Logout();
+        this._lm.Logout();
     }
 
     #endregion

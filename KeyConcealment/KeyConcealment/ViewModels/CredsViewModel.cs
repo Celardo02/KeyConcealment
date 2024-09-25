@@ -1,6 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KeyConcealment.Domain;
@@ -62,7 +61,7 @@ public partial class CredsViewModel : ViewModelBase
     // selected credential set
     private ICred<string>? _slectedCred;
 
-    private IService _s;
+    private ICredsManager _cm;
 
 
     #endregion
@@ -70,13 +69,13 @@ public partial class CredsViewModel : ViewModelBase
     #region constructors
     public CredsViewModel()
     {
-        this._s = Handler.Instance;
+        this._cm = CredsHandler.Instance;
         this.Init();
     }
 
-    public CredsViewModel(IService s)
+    public CredsViewModel(ICredsManager cm)
     {
-        this._s = s;
+        this._cm = cm;
         this.Init();
     }
 
@@ -175,11 +174,11 @@ public partial class CredsViewModel : ViewModelBase
                         if (sc.Chosen)
                             scs += sc.SpecialCharacter;
 
-                    this._s.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, scs, Convert.ToInt32(this.PwdLen));
+                    this._cm.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, scs, Convert.ToInt32(this.PwdLen));
 
                 }
                 else // adding a credential set using user typed password
-                    this._s.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, this.NewPwd);
+                    this._cm.AddCredentials(this.TypedPwd, this.NewId, this.NewUsr, this.NewMail, this.NewPwd);
                     
                 break;
             
@@ -199,7 +198,7 @@ public partial class CredsViewModel : ViewModelBase
                 break;
 
             default:
-                this._s.ShowMessage("Error", "Requested action does not exist.", Icon.Error, ButtonEnum.Ok);
+                PopUpMessageHandler.ShowMessage("Error", "Requested action does not exist.", Icon.Error, ButtonEnum.Ok);
                 break;
         }
 

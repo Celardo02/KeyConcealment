@@ -7,6 +7,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="CanUserResizeColumns" Value="True"/>
 
         <Setter Property="RowHeight" Value="30"/>
         <Setter Property="Height" Value="350"/>

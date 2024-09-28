@@ -12,6 +12,10 @@ public class CredsHandler : ICredsManager
     private readonly IPersMstPwd _persMastPwd;
     private readonly IPersCred<string,ICred<string>> _persCreds;
     private readonly ICrypto _crypto;
+
+    // character set from which derive the password string
+    // it contains all capital letters, lowercase letters and digts from 0 to 9
+    private const string CHAR_SET = "AaBb0CcDd1EeFf2GgHh3IiJj4KkLl5MmNn6OoPp7QqRr8SsTt9UuVvWwXxYyZz";
     #endregion
 
 
@@ -46,14 +50,16 @@ public class CredsHandler : ICredsManager
         return this._persCreds.ListAll();
     }
 
-    public void AddCredentials(string masterPwd, string id, string usr, string mail, string speChars, int pwdLength)
+    public void AddCredentials(string masterPwd, string id, string usr, string mail, string specChars, int pwdLength)
     {
-        throw new NotImplementedException();
+        //TO DO: add try catch
+        this._persCreds.Create(new Credentials(id, this.GenerateRandomPassword(specChars,pwdLength), mail, usr), masterPwd);
     }
 
     public void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd)
     {
-        throw new NotImplementedException();
+        //TO DO: add try catch
+        this._persCreds.Create(new Credentials(id, pwd, mail, usr), masterPwd);
     }
 
     public void PasswordCopy(string masterPwd, string id)
@@ -91,5 +97,40 @@ public class CredsHandler : ICredsManager
         throw new NotImplementedException();
     }
     #endregion
+
+    /// <summary>
+    /// Generates a random password of a specified length that contains given special characters
+    /// </summary>
+    /// <param name="specChars">string with all required special characters</param>
+    /// <param name="pwdLength">generated password length</param>
+    /// <returns>Returns the randomly generated password</returns>
+    private string GenerateRandomPassword(string specChars, int pwdLength)
+    {
+        string randomPwd = "";
+
+        // fill the string with random characters from CHAR_SET 
+        for (int i = 0; i < (pwdLength - specChars.Length); i++)
+        {
+            randomPwd += CHAR_SET[this._crypto.GenerateRandomNumber(0,CHAR_SET.Length)];
+        }
+
+        // adding required special characters
+        randomPwd += specChars;
+
+        // Convert the string to an array to shuffle it
+        char[] randomPwdArray = randomPwd.ToCharArray();
+
+        // Fisher–Yates shuffle
+        for (int i = randomPwdArray.Length - 1; i > 0; i--)
+        {
+            int j = this._crypto.GenerateRandomNumber(0, i + 1);
+            char temp = randomPwdArray[i];
+            randomPwdArray[i] = randomPwdArray[j];
+            randomPwdArray[j] = temp;
+        }
+
+        // Convert the shuffled array back to a string and return it
+        return new string(randomPwdArray);
+    }
 
 }

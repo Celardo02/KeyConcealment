@@ -14,7 +14,8 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// <summary>
     /// Inserts a new object inside the persitence class
     /// </summary>
-    /// <param name="cred">object to be inserted</param>
+    /// <param name="cred">object to be inserted. Credentials password must not be encrypted yet</param>
+    /// <param name="masterPwd">master password to encrypt credential set password</param>
     /// <exception cref="PersExcDupl">
     /// Throws a <c>PersExcDupl</c> exception if <c>cred</c> already exists
     /// </exception>
@@ -26,7 +27,7 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// Throws a <c>FormatException</c> exception if <c>cred</c> hasn't got an email as 
     /// id
     /// </exception>
-    void Create(V cred);
+    void Create(V cred, string masterPwd);
 
     /// <summary>
     /// Looks up for an object inside the persitence class
@@ -42,8 +43,9 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// <summary>
     /// Updates attributes values of an object
     /// </summary>
-    /// <param name="id">id of the object to be updated</param>
+    /// <param name="id">id of the object to be updated. Credential password must not be encrypted yet</param>
     /// <param name="cred">object to be updated</param>
+    /// <param name="masterPwd">master password to encrypt credential set password</param>
     /// <exception cref="PersExcNotFound">
     /// Throws a <c>PersExcNotFound</c> exception if an object with <c>id</c> as 
     /// identifier does not exist
@@ -52,7 +54,7 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// Throws a <c>FormatException</c> exception if <c>cred</c> hasn't got an email as 
     /// id
     /// </exception>
-    void Update(K id, V cred);
+    void Update(K id, V cred, string masterPwd);
 
     /// <summary>
     /// Deletes an object from the persistence class

@@ -47,20 +47,27 @@ public class PersCred : IPersCred<string, ICred<string>>
     #endregion
 
     #region IPersCred methods
-    public void Create(ICred<string> creds)
+    public void Create(ICred<string> cred, string masterPwd)
     {
+        string salt = "", nonce = "", tag = "";
+
         // checking if credentials already exist
-        if(this._credSets.ContainsKey(creds.Id))
-            throw new PersExcDupl("Id " + creds.Id + " already exists. Please, choose a unique Id");
+        if(this._credSets.ContainsKey(cred.Id))
+            throw new PersExcDupl("Id " + cred.Id + " already exists. Please, choose a unique Id");
         
-        if(!IsCredComplete(creds))
+        if(!IsCredComplete(cred))
             throw new PersExc("Given credentials are incomplete");
         
-        // checking if creds.Id is an e-mail
-        if(!Regex.Match(creds.Id, this._pattern).Success)
-            throw new FormatException("Id " + creds.Id + " is not a valid e-mail address");
+        // checking if cred.Id is an e-mail
+        if(!Regex.Match(cred.Id, this._pattern).Success)
+            throw new FormatException("Id " + cred.Id + " is not a valid e-mail address");
 
-        this._credSets.Add(creds.Id,creds);
+        cred.Pwd = this._crypt.EncryptAES_GMC(cred.Pwd, masterPwd, ref salt, ref nonce, ref tag);
+
+        cred.EncSalt = salt;
+        cred.EncNonce = nonce;
+        cred.EncTag = tag;
+        this._credSets.Add(cred.Id,cred);
     }
 
     public void Delete(string id)
@@ -91,32 +98,40 @@ public class PersCred : IPersCred<string, ICred<string>>
         return new Credentials(this._credSets[id]);
     }
 
-    public void Update(string id, ICred<string> creds)
+    public void Update(string id, ICred<string> cred, string masterPwd)
     {
+        string salt = "", nonce = "", tag = "";
+
         // cheching if a credntial set with "id" as identifier exists
         if(!this._credSets.ContainsKey(id))
             throw new PersExcNotFound("Credentials with " + id + " as Id do not exist. Please, insert a valid Id");
 
-        // checking if creds.Id is an e-mail
-        if(!Regex.Match(creds.Id, this._pattern).Success)
-            throw new FormatException("Id " + creds.Id + " is not a valid e-mail address");
+        // checking if cred.Id is an e-mail
+        if(!Regex.Match(cred.Id, this._pattern).Success)
+            throw new FormatException("Id " + cred.Id + " is not a valid e-mail address");
+
+        cred.Pwd = this._crypt.EncryptAES_GMC(cred.Pwd, masterPwd, ref salt, ref nonce, ref tag);
+
+        cred.EncSalt = salt;
+        cred.EncNonce = nonce;
+        cred.EncTag = tag;
 
         // checking if the id has been modified
-        if(id == creds.Id)
-            this._credSets[id] = creds;
+        if(id == cred.Id)
+            this._credSets[id] = cred;
         else 
         {
             // removing old credential set 
             this._credSets.Remove(id);
             // replacing it with the new one with the changed id
-            this._credSets.Add(creds.Id, creds);
+            this._credSets.Add(cred.Id, cred);
         }
     }
 
-    public static bool IsCredComplete(ICred<string> creds)
+    public static bool IsCredComplete(ICred<string> cred)
     {
-        // creds needs to have id, pwd and mail with not null or empty values
-        return !string.IsNullOrEmpty(creds.Id) && !string.IsNullOrEmpty(creds.Pwd) && !string.IsNullOrEmpty(creds.Mail);
+        // cred needs to have id, pwd and mail with not null or empty values
+        return !string.IsNullOrEmpty(cred.Id) && !string.IsNullOrEmpty(cred.Pwd) && !string.IsNullOrEmpty(cred.Mail);
     }
 
     public List<string> CheckCredExpiration()

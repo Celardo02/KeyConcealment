@@ -25,9 +25,9 @@ public interface ICredsManager
     /// <param name="id">Credentials id</param>
     /// <param name="usr">Username</param>
     /// <param name="mail">E-mail</param>
-    /// <param name="speChars">Special characters to use inside the auto generated password</param>
+    /// <param name="specChars">Special characters to use inside the auto generated password</param>
     /// <param name="pwdLength">Length of the auto generated password</param>
-    void AddCredentials(string masterPwd, string id, string usr, string mail, string speChars, int pwdLength);
+    void AddCredentials(string masterPwd, string id, string usr, string mail, string specChars, int pwdLength);
 
     /// <summary>
     /// Adds new credential set inside the vault 

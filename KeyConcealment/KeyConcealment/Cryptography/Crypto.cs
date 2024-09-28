@@ -91,6 +91,11 @@ public class Crypto : ICrypto
 
     #region ICripto methods
 
+    public int GenerateRandomNumber(int lowerBound, int upperBound)
+    {
+        return RandomNumberGenerator.GetInt32(lowerBound, upperBound);
+    }
+
     #region Hash methods
     public string ComputeHash(string input, ref string salt, ushort hashLen = SALT_LEN)
     {

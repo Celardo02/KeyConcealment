@@ -7,6 +7,15 @@ namespace KeyConcealment.Cryptography;
 public interface ICrypto
 {
     /// <summary>
+    /// Generates a random number
+    /// </summary>
+    /// <param name="lowerBound">inclusive lower bound value</param>
+    /// <param name="upperBound">exclusive upper bound value</param>
+    /// <returns>Returs the random number</returns>
+    int GenerateRandomNumber(int lowerBound, int upperBound);
+
+
+    /// <summary>
     /// Calculates the hash value of the input string
     /// </summary>
     /// <param name="input">string that needs to be hased</param>

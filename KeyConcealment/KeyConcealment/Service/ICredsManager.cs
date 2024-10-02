@@ -27,7 +27,7 @@ public interface ICredsManager
     /// <param name="mail">E-mail</param>
     /// <param name="specChars">Special characters to use inside the auto generated password</param>
     /// <param name="pwdLength">Length of the auto generated password</param>
-    void AddCredentials(string masterPwd, string id, string usr, string mail, string specChars, int pwdLength);
+    void AddCredentials(string masterPwd, string id, string? usr, string? mail, string specChars, int pwdLength);
 
     /// <summary>
     /// Adds new credential set inside the vault 
@@ -37,16 +37,16 @@ public interface ICredsManager
     /// <param name="usr">Username</param>
     /// <param name="mail">E-mail</param>
     /// <param name="pwd">Password</param>
-    void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd);
+    void AddCredentials(string masterPwd, string id, string? usr, string? mail, string pwd);
 
 
     /// <summary>
-    /// Copies a credential set password inside device clipboard and wait for clean it 
-    /// for 15 seconds
+    /// Copies a credential set password inside device clipboard, then waits for 20 
+    /// seconds to clean it
     /// </summary>
     /// <param name="masterPwd">master password of the vault</param>
     /// <param name="id">id of the credential set</param>
-    void PasswordCopy(string masterPwd, string id);
+    void PasswordCopyAsync(string masterPwd, string id);
 
     /// <summary>
     /// Shows credential set info to the user. Shown pieces of information are:

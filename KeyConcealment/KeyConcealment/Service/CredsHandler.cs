@@ -1,8 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input.Platform;
 using KeyConcealment.Cryptography;
 using KeyConcealment.Domain;
 using KeyConcealment.Pers;
+using KeyConcealment.ViewModels;
+using MsBox.Avalonia.Enums;
 
 namespace KeyConcealment.Service;
 
@@ -12,6 +19,8 @@ public class CredsHandler : ICredsManager
     private readonly IPersMstPwd _persMastPwd;
     private readonly IPersCred<string,ICred<string>> _persCreds;
     private readonly ICrypto _crypto;
+
+    private IClipboard? _clip;
 
     // character set from which derive the password string
     // it contains all capital letters, lowercase letters and digts from 0 to 9
@@ -28,6 +37,11 @@ public class CredsHandler : ICredsManager
         this._persMastPwd = PersMstPwd.Instance;
         this._persCreds = PersCred.Instance;
         this._crypto = Crypto.Instance;
+
+        if(OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+            this._clip = TopLevel.GetTopLevel(((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow).Clipboard;
+        else if (OperatingSystem.IsAndroid())
+            this._clip = TopLevel.GetTopLevel(((ISingleViewApplicationLifetime)Application.Current.ApplicationLifetime).MainView).Clipboard;
     }
 
     public static CredsHandler Instance {
@@ -50,33 +64,57 @@ public class CredsHandler : ICredsManager
         return this._persCreds.ListAll();
     }
 
-    public void AddCredentials(string masterPwd, string id, string usr, string mail, string specChars, int pwdLength)
+    public void AddCredentials(string masterPwd, string id, string? usr, string? mail, string specChars, int pwdLength)
     {
-        //TO DO: add try catch
-        this._persCreds.Create(new Credentials(id, this.GenerateRandomPassword(specChars,pwdLength), mail, usr), masterPwd);
-    }
-
-    public void AddCredentials(string masterPwd, string id, string usr, string mail, string pwd)
-    {
-        //TO DO: add try catch
-        this._persCreds.Create(new Credentials(id, pwd, mail, usr), masterPwd);
-    }
-
-    public void PasswordCopy(string masterPwd, string id)
-    {
-        /*
-        public static void CleanClipboard(string pattern)
+        try 
         {
-            string clipboardText = Clipboard.GetText();
-
-            // Remove the pattern from the clipboard text
-            string cleanedText = clipboardText.Replace(pattern, "");
-
-            // Set the cleaned text back to the clipboard
-            Clipboard.SetText(cleanedText);
+            if(this._persMastPwd.VerifyInsertedPwd(masterPwd))
+                this._persCreds.Create(masterPwd, id, usr, mail, this.GenerateRandomPassword(specChars,pwdLength));
+            else 
+                PopUpMessageHandler.ShowMessage("Error","Typed master password is incorrect", Icon.Error, ButtonEnum.Ok);
         }
-        */
-        throw new NotImplementedException();
+        catch (Exception e)
+        {
+            PopUpMessageHandler.ShowMessage("Error", e.Message, Icon.Error, ButtonEnum.Ok);
+        }
+    }
+
+    public void AddCredentials(string masterPwd, string id, string? usr, string? mail, string pwd)
+    {
+        try
+        {    
+            if(this._persMastPwd.VerifyInsertedPwd(masterPwd))
+                this._persCreds.Create(masterPwd, id, usr, mail, pwd);
+            else 
+                PopUpMessageHandler.ShowMessage("Error","Typed master password is incorrect", Icon.Error, ButtonEnum.Ok);
+        }
+        catch (Exception e)
+        {
+            PopUpMessageHandler.ShowMessage("Error", e.Message, Icon.Error, ButtonEnum.Ok);
+        }
+    }
+
+    public void PasswordCopyAsync(string masterPwd, string id)
+    {
+        string plainPwd;
+        ICred<string> cred;
+        
+        if(this._clip != null)
+        {
+            if(this._persMastPwd.VerifyInsertedPwd(masterPwd))
+            {
+                cred = this._persCreds.Read(id);
+                plainPwd = this._crypto.DecryptAES_GMC(cred.Pwd,masterPwd, cred.EncSalt, cred.EncNonce, cred.EncTag);
+                this._clip.SetTextAsync(plainPwd);
+
+                new Task(this.CleanClip).Start();
+            }
+            else 
+                PopUpMessageHandler.ShowMessage("Error","Typed master password is incorrect",Icon.Error,ButtonEnum.Ok);
+        }
+        else 
+            PopUpMessageHandler.ShowMessage("Error","Current platform is not supported",Icon.Error,ButtonEnum.Ok);
+
     }
 
     public void PasswordInfo(string masterPwd, string id)
@@ -131,6 +169,17 @@ public class CredsHandler : ICredsManager
 
         // Convert the shuffled array back to a string and return it
         return new string(randomPwdArray);
+    }
+
+    /// <summary>
+    /// Waits for 20 seconds and then cleans the clipboard. This method is meant to 
+    /// be only called by ClipboardCopyAsync. Do note invoke this method
+    /// </summary>
+    private void CleanClip()
+    {
+        System.Threading.Thread.Sleep(20000);
+
+        this._clip.ClearAsync();
     }
 
 }

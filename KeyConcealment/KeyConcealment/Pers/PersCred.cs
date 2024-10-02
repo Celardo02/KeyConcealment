@@ -55,12 +55,12 @@ public class PersCred : IPersCred<string, ICred<string>>
         if(this._credSets.ContainsKey(id))
             throw new PersExcDupl("Id " + id + " already exists. Please, choose a unique Id");
         
-        if(!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pwd) && !string.IsNullOrEmpty(mail))
+        if(string.IsNullOrEmpty(id) || string.IsNullOrEmpty(pwd) || string.IsNullOrEmpty(mail))
             throw new PersExc("Given credentials are incomplete");
         
         // checking if cred.Id is an e-mail
-        if(!Regex.Match(id, this._pattern).Success)
-            throw new FormatException("Id " + id + " is not a valid e-mail address");
+        if(!Regex.Match(mail, this._pattern).Success)
+            throw new FormatException(mail + " is not a valid e-mail address");
 
         pwd = this._crypt.EncryptAES_GMC(pwd, masterPwd, ref salt, ref nonce, ref tag);
 
@@ -84,6 +84,12 @@ public class PersCred : IPersCred<string, ICred<string>>
     public List<ICred<string>> ListAll()
     {
         return new List<ICred<string>>(this._credSets.Values.ToList());
+    }
+
+    public void LoadCreds(List<ICred<string>> creds)
+    {
+        foreach(ICred<string> c in creds)
+            this._credSets.Add(c.Id, c);
     }
 
     public ICred<string> Read(string id)

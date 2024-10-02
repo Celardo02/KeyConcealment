@@ -33,6 +33,17 @@ public interface IPersCred<K,V> where V : ICred<K>
     void Create(string masterPwd, string id, string? usr, string? mail, string pwd);
 
     /// <summary>
+    /// Puts a list of credentials inside the persistence class
+    /// </summary>
+    /// <param name="creds">Credentials list</param>
+    /// <remarks>
+    /// Keep in mind that this method is intend to import already encrypted credential sets.
+    /// If you need to new credentials to the persistence layer, use Create method 
+    /// instead
+    /// </remarks>
+    void LoadCreds(List<V> creds);
+
+    /// <summary>
     /// Looks up for an object inside the persitence class
     /// </summary>
     /// <param name="id">id of the searched object</param>

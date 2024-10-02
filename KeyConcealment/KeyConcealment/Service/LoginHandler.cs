@@ -64,8 +64,7 @@ public class LoginHandler : ILoginManager
                     PersSecMem.Load(insPwd, ref mp, ref lc, ref lon, ref los);
                     this._persMastPwd.MPwd = mp;
 
-                    foreach(ICred<string> c in lc)
-                        this._persCreds.Create(c);
+                    this._persCreds.LoadCreds(lc);
                     
                     this._crypto.OldNonces = lon;
                     this._crypto.OldSalts = los;

@@ -176,7 +176,7 @@ public partial class CredsViewModel : ViewModelBase
                 break;
             
             case Action.PWD_COPY:
-                this._cm.PasswordCopy(this.TypedPwd, this._slectedCred.Id);
+                this._cm.PasswordCopyAsync(this.TypedPwd, this._slectedCred.Id);
                 break;
 
             case Action.PWD_INFO:

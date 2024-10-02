@@ -14,8 +14,11 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// <summary>
     /// Inserts a new object inside the persitence class
     /// </summary>
-    /// <param name="cred">object to be inserted. Credentials password must not be encrypted yet</param>
     /// <param name="masterPwd">master password to encrypt credential set password</param>
+    /// <param name="id">credentials id</param>
+    /// <param name="usr">username</param>
+    /// <param name="mail">e-mail</param>
+    /// <param name="pwd">credentials plain text password</param>
     /// <exception cref="PersExcDupl">
     /// Throws a <c>PersExcDupl</c> exception if <c>cred</c> already exists
     /// </exception>
@@ -27,7 +30,7 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// Throws a <c>FormatException</c> exception if <c>cred</c> hasn't got an email as 
     /// id
     /// </exception>
-    void Create(V cred, string masterPwd);
+    void Create(string masterPwd, string id, string? usr, string? mail, string pwd);
 
     /// <summary>
     /// Looks up for an object inside the persitence class
@@ -76,14 +79,6 @@ public interface IPersCred<K,V> where V : ICred<K>
     /// </summary>
     /// <returns>Returns a <c>List</c> with all the object inside the presistence class</returns>
     List<V> ListAll();
-
-    /// <summary>
-    /// Checks if <c>cred</c> has the minimum pieces of information required to  
-    /// be meaningful
-    /// </summary>
-    /// <param name="cred">object to be checked</param>
-    /// <returns> Returns <c>true</c> if <c>cred</c> has the minimum pieces of information required, <c>false</c> otherwise</returns>
-    static abstract bool IsCredComplete(ICred<string> cred);
 
     /// <summary>
     /// Checks if there are expired credentials inside the persistence layer or not

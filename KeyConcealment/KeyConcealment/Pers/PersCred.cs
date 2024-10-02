@@ -47,27 +47,24 @@ public class PersCred : IPersCred<string, ICred<string>>
     #endregion
 
     #region IPersCred methods
-    public void Create(ICred<string> cred, string masterPwd)
+    public void Create(string masterPwd, string id, string? usr, string? mail, string pwd)
     {
         string salt = "", nonce = "", tag = "";
 
         // checking if credentials already exist
-        if(this._credSets.ContainsKey(cred.Id))
-            throw new PersExcDupl("Id " + cred.Id + " already exists. Please, choose a unique Id");
+        if(this._credSets.ContainsKey(id))
+            throw new PersExcDupl("Id " + id + " already exists. Please, choose a unique Id");
         
-        if(!IsCredComplete(cred))
+        if(!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(pwd) && !string.IsNullOrEmpty(mail))
             throw new PersExc("Given credentials are incomplete");
         
         // checking if cred.Id is an e-mail
-        if(!Regex.Match(cred.Id, this._pattern).Success)
-            throw new FormatException("Id " + cred.Id + " is not a valid e-mail address");
+        if(!Regex.Match(id, this._pattern).Success)
+            throw new FormatException("Id " + id + " is not a valid e-mail address");
 
-        cred.Pwd = this._crypt.EncryptAES_GMC(cred.Pwd, masterPwd, ref salt, ref nonce, ref tag);
+        pwd = this._crypt.EncryptAES_GMC(pwd, masterPwd, ref salt, ref nonce, ref tag);
 
-        cred.EncSalt = salt;
-        cred.EncNonce = nonce;
-        cred.EncTag = tag;
-        this._credSets.Add(cred.Id,cred);
+        this._credSets.Add(id, new Credentials(id, pwd, nonce, tag, salt, mail, usr));
     }
 
     public void Delete(string id)
@@ -126,12 +123,6 @@ public class PersCred : IPersCred<string, ICred<string>>
             // replacing it with the new one with the changed id
             this._credSets.Add(cred.Id, cred);
         }
-    }
-
-    public static bool IsCredComplete(ICred<string> cred)
-    {
-        // cred needs to have id, pwd and mail with not null or empty values
-        return !string.IsNullOrEmpty(cred.Id) && !string.IsNullOrEmpty(cred.Pwd) && !string.IsNullOrEmpty(cred.Mail);
     }
 
     public List<string> CheckCredExpiration()

@@ -119,7 +119,18 @@ public class CredsHandler : ICredsManager
 
     public void PasswordInfo(string masterPwd, string id)
     {
-        throw new NotImplementedException();
+        string plainPwd; 
+        ICred<string> cred;
+
+        if(this._persMastPwd.VerifyInsertedPwd(masterPwd))
+        {
+            cred = this._persCreds.Read(id);
+            plainPwd = this._crypto.DecryptAES_GMC(cred.Pwd,masterPwd, cred.EncSalt, cred.EncNonce, cred.EncTag);
+
+            PopUpMessageHandler.ShowMessage("Info","Pwd: " + plainPwd + "\n Exp: " + cred.Exp,Icon.Info, ButtonEnum.Ok);
+        }
+        else 
+            PopUpMessageHandler.ShowMessage("Error","Typed master password is incorrect",Icon.Error,ButtonEnum.Ok);
     }
 
     public void RegeneratePassword(string masterPwd, string id)
